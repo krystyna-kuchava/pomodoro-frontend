@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
 
 import { Task } from './reducers/task';
-import { Login } from './reducers/login';
+import { Authorization } from './reducers/authorization';
 
 export const rootReducer = combineReducers({
     Task,
-    Login
+    Authorization
 });

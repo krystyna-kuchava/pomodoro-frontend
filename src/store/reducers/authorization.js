@@ -1,11 +1,11 @@
 import {
-    LOGIN
-} from '../actions/login';
+    AUTHORIZATION
+} from '../actions/authorization';
 
-export function Login(state = { name: 'Kris' }, action) {
+export function Authorization(state = {  }, action) {
 
     switch (action.type) {
-        case LOGIN:
+        case AUTHORIZATION:
             return {
                 ...state,
                 ...action.payload,

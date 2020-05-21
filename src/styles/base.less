@@ -1,3 +1,10 @@
+body {
+  margin: 0;
+  background-color: @madison;
+  font-family:  'robotoregular';
+  color: @white;
+}
+
 h1,
 h2,
 h3,
@@ -15,7 +22,9 @@ ul {
 }
 
 a {
+  color: @white;
   text-decoration: none;
+  transition: all 0.15s ease-out;
 }
 
 input:focus, button:focus {
@@ -61,16 +70,7 @@ a:hover, button:hover {
 
 .subtitle {
   font-family:  'robotoregular';
-  font-size: 17px;
-  @media (max-width: 1280px) {
-    font-size: 21px;
-  }
-  @media (max-width: 768px) {
-    font-size: 19px;
-  }
-  @media (max-width: 1024px){
-    font-size: 19px;
-  }
+  font-size: 18px;
 }
 
 .paragraph {
@@ -83,3 +83,39 @@ a:hover, button:hover {
   font-size: 14px;
 }
 
+.page-wrapper {
+  max-width: 1440px;
+  padding: 0 35px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 0 92px;
+  }
+}
+
+.page-heading {
+  position: relative;
+  margin: 21px auto 0;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: center;
+  text-align: center;
+
+  h1{
+    .heading1();
+    margin: 0 auto;
+    color: @white;
+  }
+
+  h2 {
+    .heading2();
+    font-size: 19px !important;
+    margin: 5px auto 0;
+    color: @nepal;
+
+    @media (min-width: 768px) {
+      font-size: 22px;
+    }
+  }
+}
