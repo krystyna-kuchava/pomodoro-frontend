@@ -1,0 +1,276 @@
+.pomodoros-settings {
+  display: flex;
+  justify-content: space-around;
+}
+
+.section-name {
+  width: 100%;
+  margin-top: 25px;
+  position: relative;
+  text-align: center;
+  .message();
+  font-size: 19px;
+  color: @nepal;
+}
+
+.section-pomodoros {
+  margin-top: 83px;
+  text-align: center;
+}
+
+.pomodoros {
+  width: 55em;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-content: space-between;
+  flex-wrap: wrap;
+}
+
+.pomodoro-criterion {
+  width: 300px;
+  margin-bottom: 80px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  .caption();
+  color: @nepal;
+
+  label {
+    width: 100%;
+    text-align: center;
+    color: @white;
+  }
+
+  p {
+    width: 100%;
+    text-align: center;
+  }
+
+  .measure {
+    font-weight: bold;
+    color: #fefefe;
+  }
+}
+
+.iteration-count {
+  position: relative;
+  margin: 20px auto;
+
+  .iteration-decrease,
+  .iteration-increase {
+    width: 26px;
+    height: 27px;
+    position: absolute;
+    border: none;
+    background-color: transparent;
+    color: @nepal;
+    font-size: 27px;
+  }
+
+  .iteration-decrease {
+    left: 0;
+    top: -5px;
+
+    &:hover {
+      color: @spray;
+    }
+
+    &:hover ~ input {
+      border-bottom: 1px solid @spray;
+    }
+  }
+
+  .iteration-increase {
+    right: 0;
+    top: -5px;
+
+    &:hover {
+      color: @spray;
+    }
+
+    &:hover ~ input {
+      border-bottom: 1px solid @spray;
+    }
+  }
+
+  input {
+    width: 100px;
+    height: 28px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid @nepal;
+    text-align: center;
+    color: @nepal;
+    font-size: 18px;
+  }
+
+}
+
+.section-cycle {
+  margin: 50px 0 35px;
+  text-align: center;
+
+  h3 {
+    margin-bottom: 20px;
+    .heading3();
+    color: @white;
+  }
+}
+
+.cycle-info {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  flex-wrap: nowrap;
+  margin-bottom: 15px;
+  color: @nepal;
+  .caption();
+
+  &-caption {
+    position: relative;
+
+    &::after {
+      content: "";
+      width: 4px;
+      height: 4px;
+      display: inline-block;
+      position: absolute;
+      bottom: -5px;
+      background-color: @others;
+      border-radius: 50%;
+    }
+
+    &:nth-child(1) {
+      margin-right: auto;
+      text-align: left;
+
+      &::after {
+        left: 0;
+        transform: translate(50%);
+      }
+    }
+
+    &:nth-child(2) {
+      margin-left: auto;
+      text-align: right;
+
+      &::after {
+        right: 0;
+      }
+    }
+  }
+}
+
+.cycle-graphic {
+  width: 100%;
+  height: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.time-info {
+  width: 100%;
+  height: 20px;
+  margin-top: 20px;
+  display: flex;
+  color: @nepal;
+  .caption();
+
+  &-caption {
+    position: relative;
+    transform: translate(50%);
+
+    &:nth-child(1) {
+      width: 0;
+      opacity: 0;
+    }
+
+    &::before {
+      content: "";
+      width: 4px;
+      height: 4px;
+      display: inline-block;
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translate(-50%);
+      background-color: @others;
+      border-radius: 50%;
+    }
+  }
+}
+
+.pomodoros-finishing {
+  width: 280px;
+  margin: 0 auto 60px;
+  display: flex;
+  justify-content: space-between;
+
+  .button-ok {
+    width: 137px;
+  }
+
+  .button-save {
+    width: 123px;
+  }
+}
+
+.workTimeGraph {
+  background-color: @work;
+  display: inline-block;
+  position: relative;
+}
+
+.shortBreakGraph {
+  background-color: @malibu;
+  display: inline-block;
+}
+
+.longBreakGraph {
+  background-color: @hobby;
+  display: inline-block;
+}
+
+.first-cycle {
+  width: 140px;
+  position: absolute;
+  top: -35px;
+  transform: translate(-50%);
+  color: @nepal;
+  .caption();
+
+  &-dot {
+    position: relative;
+
+    &::after {
+      content: "";
+      width: 4px;
+      height: 4px;
+      display: inline-block;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+      bottom: -5px;
+      background-color: @others;
+      border-radius: 50%;
+    }
+  }
+}
+
+@colors-iteration: @work, @others, @malibu, @hobby;
+@names-iteration: work-time, work-iteration, short-break, long-break;
+@length-iteration: length(@colors-iteration);
+
+.alert-iteration(@names-iteration; @colors-iteration; @index) when (iscolor(extract(@colors-iteration, @index))) and (@index > 0) {
+  .alert-iteration(@names-iteration; @colors-iteration; (@index - 1));
+
+  @name: extract(@names-iteration, @index);
+  @color: extract(@colors-iteration, @index);
+
+  .criterion-@{name} label::before {
+    background-color: @color;
+  }
+}
+
+.alert-iteration(@names-iteration; @colors-iteration; @length-iteration);

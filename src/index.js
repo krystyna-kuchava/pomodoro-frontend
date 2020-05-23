@@ -13,6 +13,7 @@ import {DefaultPage} from './pages/default-page';
 import {LoginPageConnector} from './pages/login-page';
 import {SignUpPageConnector} from './pages/sign-up-page';
 import {TasksListPageConnector} from './pages/tasks-list-page';
+import {SettingsPageConnector} from './pages/settings-page';
 
 
 const App = () => (
@@ -45,7 +46,7 @@ const App = () => (
             <Route
                 path={routerPaths.SETTINGS}
                 exact
-                component={DefaultPage}
+                component={SettingsPageConnector}
             />
 
             <Route

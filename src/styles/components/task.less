@@ -1,0 +1,267 @@
+.task {
+  width: 100%;
+  height: 87px;
+  display: flex;
+  flex-wrap: nowrap;
+  margin-bottom: 9px;
+  position: relative;
+
+  &-content {
+    width: 100%;
+    display: flex;
+    background-color: @white;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 9px;
+      height: 100%;
+    }
+  }
+
+  &-term {
+    width: 94px;
+    margin: 23px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    color: @dark-grey;
+
+    p {
+      height: 32px;
+      .caption();
+      font-size: 29px;
+    }
+
+    span {
+      .paragraph();
+      font-size: 11px;
+    }
+  }
+
+  &-description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto 0 0;
+  }
+
+  &-title {
+    .heading3();
+  }
+
+  &-text {
+    .paragraph();
+    color: @grey;
+  }
+
+  &-edit {
+    height: 100% - 24px;
+    margin: 12px 50px 12px 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex-wrap: wrap;
+
+    button {
+      width: 50px;
+      height: 30px;
+      background-color: transparent;
+      border: none;
+      font-size: 19px;
+      color: @silver;
+
+      &.icon-trash {
+        height: 40px;
+      }
+
+      &:hover {
+        color: @nepal;
+      }
+
+      &:focus {
+        color: @spray;
+      }
+    }
+  }
+
+  &-priority {
+    width: 87px;
+    height: 100%;
+    position: relative;
+
+    span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 50px;
+      color: @white;
+    }
+
+    p {
+      position: absolute;
+      top: 56%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      .caption();
+      font-size: 25px;
+      font-weight: bold;
+      color: @white;
+    }
+  }
+
+  &-start {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border: none;
+    order: 10;
+    opacity: 0;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.task-done {
+
+  .task-content {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .task-title {
+    filter: brightness(80%);
+    text-decoration: line-through;
+  }
+
+  .task-priority {
+    opacity: 0.8;
+  }
+
+  .task-edit, .task-start {
+    display: none;
+  }
+}
+
+.timer-link {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+@colors-categories: @work, @education, @hobby, @sport, @others;
+@categories-active: @work-active, @education-active, @hobby-active, @sport-active, @others-active;
+@names-categories: work, education, hobby, sport, others;
+@length-categories: length(@colors-categories);
+
+.alert-categories(@names-categories; @colors-categories; @categories-active; @index) when (iscolor(extract(@colors-categories, @index))) and (@index > 0) {
+  .alert-categories(@names-categories; @colors-categories; @categories-active; (@index - 1));
+
+  @name: extract(@names-categories, @index);
+  @color: extract(@colors-categories, @index);
+  @color-active: extract(@categories-active, @index);
+
+  .categories-@{name}::before, .categories-@{name} > .task-delete-button-wrapper > .task-delete-button {
+    background-color: @color;
+  }
+
+  .categories-@{name} > .task-delete-button-wrapper > .task-delete-button > button {
+    background-color: @color-active;
+  }
+
+
+  .modal-add-category > .categories-@{name}:hover {
+    color: @spray;
+  }
+
+  .modal-add-category > .categories-@{name}:hover > .type-dot {
+    background-color: @color;
+  }
+
+  .modal-add-category > .categories-@{name} > input[type=radio]:checked ~ .type-dot {
+    background-color: @color;
+  }
+
+  .modal-add-category > .categories-@{name} > input[type=radio]:checked ~ span {
+    color: @white;
+  }
+
+  .global-list-@{name} {
+    color: @color;
+    width: 100%;
+    margin-top: 10px;
+    position: relative;
+    display: inline-block;
+
+    .global-list-category {
+      span {
+        background-color: @color;
+      }
+    }
+  }
+
+  .global-list-@{name}::before {
+    content: "";
+    width: 9px;
+    height: 100% - 14px;
+    position: absolute;
+    top: 10px;
+    left: 4px;
+    background-color: @color;
+  }
+}
+
+
+.alert-categories(@names-categories; @colors-categories; @categories-active; @length-categories);
+
+@colors-priority: @urgent, @high, @middle, @low, @nepal;
+@names-priority: urgentP, highP, middleP, lowP, failedP;
+@priority-active: @urgent-active, @high-active, @middle-active, @low-active;
+@length-priority: length(@colors-priority);
+
+.alert-priority(@names-priority; @colors-priority; @priority-active; @index2) when (iscolor(extract(@colors-priority, @index2))) and (@index2 > 0) {
+  .alert-priority(@names-priority; @colors-priority; @priority-active; (@index2 - 1));
+
+  @name: extract(@names-priority, @index2);
+  @color: extract(@colors-priority, @index2);
+  @background-color: extract(@priority-active, @index2);
+
+  .priority-@{name}::before {
+    background-color: @color;
+  }
+
+  .priority-@{name} ~ .task-priority {
+    background-color: @color;
+  }
+
+  .priority-@{name} ~ .task-priority > .task-start {
+    background-color: @background-color;
+  }
+
+  .priority-@{name} > .task-title {
+    color: @color;
+  }
+
+  .modal-add-priority > .priority-@{name}:hover {
+    color: @spray;
+  }
+
+  .modal-add-priority > .priority-@{name}:hover > .type-dot {
+    background-color: @color;
+  }
+
+  .modal-add-priority > .priority-@{name} > input[type=radio]:checked ~ .type-dot {
+    background-color: @color;
+  }
+
+  .modal-add-priority > .priority-@{name} > input[type=radio]:checked ~ span {
+    color: @white;
+  }
+}
+
+.alert-priority(@names-priority; @colors-priority; @priority-active; @length-priority);

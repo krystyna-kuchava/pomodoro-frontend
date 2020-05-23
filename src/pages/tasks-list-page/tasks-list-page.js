@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Redirect} from 'react-router';
 import routerPaths from "../../constants/router-paths";
 import {Header} from "../../components/header/header";
+import {Task} from "../../components/task/task";
 
 export class TasksListPage extends Component {
     constructor() {
@@ -9,13 +10,141 @@ export class TasksListPage extends Component {
 
         this.state = {
             redirectToSettings: false,
-            redirectToReports: false
+            redirectToReports: false,
+
+            isToDoList: true,
+            isDoneList: false,
+
+            isAllFilter: true,
+            isUrgentFilter: false,
+            isHighFilter: false,
+            isNormalFilter: false,
+            isLowFilter: false,
         };
 
-        //this.onSignUpClick = this.onSignUpClick.bind(this);
+        this.goToDoneList = this.goToDoneList.bind(this);
+        this.goToToDoList = this.goToToDoList.bind(this);
+
+        this.onChangeFilter = this.onChangeFilter.bind(this);
+
+
+    }
+
+    goToDoneList() {
+        if (this.state.isToDoList) {
+            this.setState({isDoneList: true, isToDoList: false});
+        }
+    }
+
+    goToToDoList() {
+        if (this.state.isDoneList) {
+            this.setState({isDoneList: false, isToDoList: true});
+        }
+    }
+
+    onChangeFilter(priority) {
+
+        switch (priority) {
+            case 0:
+                this.setState({
+                    isAllFilter: true,
+                    isUrgentFilter: false,
+                    isHighFilter: false,
+                    isNormalFilter: false,
+                    isLowFilter: false,
+                });
+                break;
+            case 1:
+                this.setState({
+                    isAllFilter: false,
+                    isUrgentFilter: true,
+                    isHighFilter: false,
+                    isNormalFilter: false,
+                    isLowFilter: false,
+                });
+                break;
+            case 2:
+                this.setState({
+                    isAllFilter: false,
+                    isUrgentFilter: false,
+                    isHighFilter: true,
+                    isNormalFilter: false,
+                    isLowFilter: false,
+                });
+                break;
+            case 3:
+                this.setState({
+                    isAllFilter: false,
+                    isUrgentFilter: false,
+                    isHighFilter: false,
+                    isNormalFilter: true,
+                    isLowFilter: false,
+                });
+                break;
+            case 4:
+                this.setState({
+                    isAllFilter: false,
+                    isUrgentFilter: false,
+                    isHighFilter: false,
+                    isNormalFilter: false,
+                    isLowFilter: true,
+                });
+                break;
+        }
     }
 
     render() {
+        const taskList = [{
+            title: 'Task 110',
+            description: 'Task 110',
+            categoryId: '1',
+            priorityId: '1',
+            estimation: '2',
+            deadlineDate: '19-05-2020',
+            status: 'DONE_LIST',
+            taskId: 233
+        },
+            {
+                title: 'Task 110',
+                description: 'Task 110',
+                categoryId: '2',
+                priorityId: '4',
+                estimation: '3',
+                deadlineDate: '19-05-2020',
+                status: 'TODO_LIST',
+                taskId: 236
+            },
+            {
+                title: 'Task 110',
+                description: 'Task 110',
+                categoryId: '3',
+                priorityId: '2',
+                estimation: '5',
+                deadlineDate: '19-05-2020',
+                status: 'TODO_LIST',
+                taskId: 23366
+            },
+            {
+                title: 'Task 110',
+                description: 'Task 110',
+                categoryId: '3',
+                priorityId: '3',
+                estimation: '4',
+                deadlineDate: '19-05-2020',
+                status: 'GLOBAL_LIST',
+                taskId: 23323
+            },
+            {
+                title: 'Task 110',
+                description: 'Task 110',
+                categoryId: '3',
+                priorityId: '4',
+                estimation: '2',
+                deadlineDate: '19-05-2020',
+                status: 'GLOBAL_LIST',
+                taskId: 3323
+            }];
+
         return (
             <>
                 <Header/>
@@ -26,39 +155,71 @@ export class TasksListPage extends Component {
                             <a className="button-add-task icon-add" id="addTaskButton"/>
                         </div>
                         <div id="tasksNavigation" className="nav-task-type-wrapper">
-                            {/*<nav className="nav-tasks-type-wrapper">
+                            <nav className="nav-tasks-type-wrapper">
                                 <ul className="nav-section-types" id="navigation">
-                                    <li className="navigation-item"><a href="/taskList/toDo" id="toDo"
-                                                                       className="selected-item">To do</a></li>
-                                    <li className="navigation-item"><a href="/taskList/done" id="done">Done</a></li>
+                                    <li className="navigation-item">
+                                        <a className={this.state.isToDoList ? 'selected-item' : ''}
+                                           onClick={this.goToToDoList}>
+                                            To do
+                                        </a>
+                                    </li>
+                                    <li className="navigation-item">
+                                        <a className={this.state.isDoneList ? 'selected-item' : ''}
+                                           onClick={this.goToDoneList}>
+                                            Done
+                                        </a>
+                                    </li>
                                 </ul>
-                            </nav>*/}
+                            </nav>
                         </div>
-                        <section className="task-list-wrapper">
-                            <div className="task-list" id="taskListContainer">
-                                {/*<section className="task-added">
+
+                        {
+                            this.state.isToDoList ? (
+                                    <>
+                                        <section className="task-list-wrapper">
+                                            <div className="task-list" id="taskListContainer">
+                                                {/*<section className="task-added">
                                     <p>Task added,<br>drag it to the top 5 in daily task list</p>
                                     <i className="drag-to-top icon-arrow_circle"></i>
                                 </section>*/}
 
-
-                            </div>
-                        </section>
-                        <section className="global-list-wrapper" id="global-list-wrapper">
-                            {/*<div className="link-to-global">
-                                <a id="showHideGlobalList" title="Go to Global list">Global list <span
-                                    className="icon-global-list-arrow-down"></span></a>
-                            </div>*/}
-                            {/*<div className="global-list-nav-wrapper" id="global-list-nav">
-                                <ul className="global-list-nav" id="category-list">
-                                    <li className="global-list-nav-item selected-list-item"><a id="all">All</a></li>
-                                    <li className="global-list-nav-item"><a id="0">Urgent</a></li>
-                                    <li className="global-list-nav-item"><a id="1">High</a></li>
-                                    <li className="global-list-nav-item"><a id="2">Middle</a></li>
-                                    <li className="global-list-nav-item"><a id="3">Low</a></li>
-                                </ul>
-                            </div>*/}
-                            {/*<section className="global-list" id="global-list">
+                                                {taskList.map(task => {
+                                                    return (<Task  taskData={task}/>);
+                                                })}
+                                            </div>
+                                        </section>
+                                        <section className="global-list-wrapper" id="global-list-wrapper">
+                                            <h2>Global list</h2>
+                                            <div className="global-list-nav-wrapper" id="global-list-nav">
+                                                <ul className="global-list-nav" id="category-list">
+                                                    <li className="global-list-nav-item">
+                                                        <a className={this.state.isAllFilter ? 'selected-item' : ''}
+                                                           id="all"
+                                                           onClick={this.onChangeFilter.bind(this, 0)}>All</a>
+                                                    </li>
+                                                    <li className="global-list-nav-item">
+                                                        <a className={this.state.isUrgentFilter ? 'selected-item' : ''}
+                                                           id="1"
+                                                           onClick={this.onChangeFilter.bind(this, 1)}>Urgent</a>
+                                                    </li>
+                                                    <li className="global-list-nav-item">
+                                                        <a className={this.state.isHighFilter ? 'selected-item' : ''}
+                                                           id="2"
+                                                           onClick={this.onChangeFilter.bind(this, 2)}>High</a>
+                                                    </li>
+                                                    <li className="global-list-nav-item">
+                                                        <a className={this.state.isNormalFilter ? 'selected-item' : ''}
+                                                           id="3"
+                                                           onClick={this.onChangeFilter.bind(this, 3)}>Middle</a>
+                                                    </li>
+                                                    <li className="global-list-nav-item">
+                                                        <a className={this.state.isLowFilter ? 'selected-item' : ''}
+                                                           id="4"
+                                                           onClick={this.onChangeFilter.bind(this, 4)}>Low</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            {/*<section className="global-list" id="global-list">
                                 <section className="global-list-work" id="global-list-work">
                                     <div className="global-list-category" style="display: flex;">
                                         <span></span>
@@ -158,10 +319,23 @@ export class TasksListPage extends Component {
                                     </div>
                                 </section>
                             </section>*/}
-                        </section>
+                                        </section>
+                                    </>
+                                )
+
+
+                                :
+
+
+                                (
+                                    <>
+                                    </>
+                                )
+                        }
+
                     </main>
                 </div>
             </>
-    );
+        );
     }
-    }
+}
