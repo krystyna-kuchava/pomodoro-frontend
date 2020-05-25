@@ -13,3 +13,87 @@ button {
     background: rgba(255, 255, 255, 0.1);
   }
 }
+
+.button-ok,
+.button-cancel,
+.button-save {
+  height: 42px;
+  padding-top: 5px;
+  color: @white;
+  .caption();
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+}
+
+.button-ok {
+  background-color: @malibu;
+
+  &:hover,
+  &:focus {
+    background-color: @curious-blue;
+  }
+
+  &:active {
+    background-color: @pelorous;
+  }
+}
+
+.button-cancel {
+  background-color: @tomato;
+
+  &:hover,
+  &:focus {
+    background-color: @dark-coral;
+  }
+
+  &:active {
+    background-color: @mahogany;
+  }
+}
+
+.button-save {
+  background-color: @mountain-meadow;
+
+  &:hover,
+  &:focus {
+    background-color: @mountain-meadow-dark;
+  }
+
+  &:active {
+    background-color: @deep-sea;
+  }
+}
+
+.modal-ok-close,
+.modal-button-delete {
+  width: 21px;
+  height: 21px;
+  padding: 0;
+  font-size: 21px;
+  color: @nepal;
+  background-color: transparent;
+  border: none;
+}
+
+.modal-ok-close {
+  margin-left: 15px;
+  float: right;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: @spray;
+  }
+}
+
+.modal-button-delete {
+  float: left;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: @spray;
+  }
+}
+

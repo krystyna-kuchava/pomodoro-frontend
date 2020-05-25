@@ -52,14 +52,6 @@ export class Task extends Component {
         return (
             <div className={taskData.status === 'DONE_LIST' ? 'task task-done' : 'task'} data-task-id={taskData.taskId}>
                 <div className={`task-content ${categoryClass}`}>
-                    <div className="task-delete-button-wrapper">
-                        {/*<div className="task-delete-button">
-                            <span className="icon-trash"/>
-                            <button className="select-for-deleting icon-close" data-task-id={taskData.taskId}
-                                    id="taskButtonDelete">
-                            </button>
-                        </div>*/}
-                    </div>
                     <div className="task-term">
                         <span>{taskData.completeDay ? taskData.completeDay : taskData.deadlineDate}</span>
                     </div>

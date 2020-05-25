@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router';
 import routerPaths from "../../constants/router-paths";
+import CATEGORIES from "../../constants/categories";
+import globalListData from "../../constants/globalList";
 import {Header} from "../../components/header/header";
 import {Task} from "../../components/task/task";
+import {AddTaskModalConnector} from "../../components/add-task";
 
 export class TasksListPage extends Component {
     constructor() {
         super();
 
         this.state = {
-            redirectToSettings: false,
-            redirectToReports: false,
 
             isToDoList: true,
             isDoneList: false,
@@ -20,6 +21,12 @@ export class TasksListPage extends Component {
             isHighFilter: false,
             isNormalFilter: false,
             isLowFilter: false,
+
+            globalListData: globalListData,
+
+            isAddTaskModalWindow: false,
+            isRemoveTaskModalWindow: false,
+            isEditTaskModalWindow: false,
         };
 
         this.goToDoneList = this.goToDoneList.bind(this);
@@ -28,6 +35,8 @@ export class TasksListPage extends Component {
         this.onChangeFilter = this.onChangeFilter.bind(this);
 
 
+        this.onAddTaskClick = this.onAddTaskClick.bind(this);
+        this.closeAddTaskModal = this.closeAddTaskModal.bind(this);
     }
 
     goToDoneList() {
@@ -53,6 +62,7 @@ export class TasksListPage extends Component {
                     isNormalFilter: false,
                     isLowFilter: false,
                 });
+                this.filterGlobalTasks(0);
                 break;
             case 1:
                 this.setState({
@@ -62,6 +72,7 @@ export class TasksListPage extends Component {
                     isNormalFilter: false,
                     isLowFilter: false,
                 });
+                this.filterGlobalTasks(priority.toString());
                 break;
             case 2:
                 this.setState({
@@ -71,6 +82,7 @@ export class TasksListPage extends Component {
                     isNormalFilter: false,
                     isLowFilter: false,
                 });
+                this.filterGlobalTasks(priority.toString());
                 break;
             case 3:
                 this.setState({
@@ -80,6 +92,7 @@ export class TasksListPage extends Component {
                     isNormalFilter: true,
                     isLowFilter: false,
                 });
+                this.filterGlobalTasks(priority.toString());
                 break;
             case 4:
                 this.setState({
@@ -89,12 +102,37 @@ export class TasksListPage extends Component {
                     isNormalFilter: false,
                     isLowFilter: true,
                 });
+                this.filterGlobalTasks(priority.toString());
                 break;
         }
     }
 
+    filterGlobalTasks(priority) {
+        if (priority === 0) {
+            this.setState({globalListData: globalListData});
+        } else {
+            const filteredGlobalListData = {};
+
+            filteredGlobalListData[CATEGORIES.WORK] = globalListData[CATEGORIES.WORK].filter(task => task.priorityId === priority);
+            filteredGlobalListData[CATEGORIES.SPORT] = globalListData[CATEGORIES.SPORT].filter(task => task.priorityId === priority);
+            filteredGlobalListData[CATEGORIES.STUDYING] = globalListData[CATEGORIES.STUDYING].filter(task => task.priorityId === priority);
+            filteredGlobalListData[CATEGORIES.HOBBY] = globalListData[CATEGORIES.HOBBY].filter(task => task.priorityId === priority);
+            filteredGlobalListData[CATEGORIES.OTHER] = globalListData[CATEGORIES.OTHER].filter(task => task.priorityId === priority);
+
+            this.setState({globalListData: filteredGlobalListData});
+        }
+    }
+
+    onAddTaskClick() {
+        this.setState({isAddTaskModalWindow: true});
+    }
+
+    closeAddTaskModal() {
+        this.setState({isAddTaskModalWindow: false});
+    }
+
     render() {
-        const taskList = [{
+        const todoTaskList = [{
             title: 'Task 110',
             description: 'Task 110',
             categoryId: '1',
@@ -148,11 +186,16 @@ export class TasksListPage extends Component {
         return (
             <>
                 <Header/>
+                {this.state.isAddTaskModalWindow ? (
+                    <div className="modal-window-wrapper">
+                        <AddTaskModalConnector closeAddTaskModal={this.closeAddTaskModal}/>
+                    </div>) : (<></>)}
+
                 <div className="page-wrapper">
                     <main className="main" id="main">
                         <div className="page-heading">
                             <h1>Daily Tasks List</h1>
-                            <a className="button-add-task icon-add" id="addTaskButton"/>
+                            <a className="button-add-task icon-add" onClick={this.onAddTaskClick}/>
                         </div>
                         <div id="tasksNavigation" className="nav-task-type-wrapper">
                             <nav className="nav-tasks-type-wrapper">
@@ -178,13 +221,17 @@ export class TasksListPage extends Component {
                                     <>
                                         <section className="task-list-wrapper">
                                             <div className="task-list" id="taskListContainer">
-                                                {/*<section className="task-added">
-                                    <p>Task added,<br>drag it to the top 5 in daily task list</p>
-                                    <i className="drag-to-top icon-arrow_circle"></i>
-                                </section>*/}
+                                                {todoTaskList.length === 0 ? (
+                                                    <section className="no-task-already">
+                                                        <div className="page-indicate"/>
+                                                        <p>You don`t have any tasks left for today.</p>
+                                                        <p>Add new tasks to stay productivity.
+                                                        </p>
+                                                    </section>
+                                                ) : (<></>)}
 
-                                                {taskList.map(task => {
-                                                    return (<Task  taskData={task}/>);
+                                                {todoTaskList.map(task => {
+                                                    return (<Task taskData={task}/>);
                                                 })}
                                             </div>
                                         </section>
@@ -219,116 +266,80 @@ export class TasksListPage extends Component {
                                                     </li>
                                                 </ul>
                                             </div>
-                                            {/*<section className="global-list" id="global-list">
-                                <section className="global-list-work" id="global-list-work">
-                                    <div className="global-list-category" style="display: flex;">
-                                        <span></span>
-                                        <p>WORK</p>
-                                    </div>
-                                    <section className="task " taskid="id1589710353514">
-                                        <div className="task-content categories-work">
-                                            <div className="task-delete-button-wrapper">
-                                                <div className="task-delete-button">
-                                                    <span className="icon-trash"></span>
-                                                    <button className="select-for-deleting icon-close"
-                                                            taskid="id1589710353514" id="taskButtonDelete">
-                                                        <!--<span class=""></span>-->
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div className="task-term">
-                                                <span>05/23/2020 </span>
-                                            </div>
-                                            <div className="task-description priority-highP">
-                                                <h2 className="task-title">dcdc</h2>
-                                                <p className="task-text">gbhjklkjhvjkljh</p>
-                                            </div>
-                                            <div className="task-edit">
-                                                <button className="icon-arrows-up" taskid="id1589710353514"></button>
-                                                <button className="icon-edit" taskid="id1589710353514"
-                                                        title="Edit task"></button>
-                                            </div>
-                                            <div className="task-priority">
-                                                <span className="icon-tomato"></span>
-                                                <p>3</p>
-                                                <div className="task-start">
-                                                    <span className="icon-timer"></span>
-                                                    <a href="/timer" className="timer-link" id="linkToTimer"
-                                                       taskid="id1589710353514" title="Go to Timer"></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </section>
-                                <section className="global-list-education" id="global-list-education">
-                                    <div className="global-list-category">
-                                        <span></span>
-                                        <p>EDUCATION</p>
-                                    </div>
-                                </section>
-                                <section className="global-list-hobby" id="global-list-hobby">
-                                    <div className="global-list-category">
-                                        <span></span>
-                                        <p>HOBBY</p>
-                                    </div>
-                                </section>
-                                <section className="global-list-sport" id="global-list-sport">
-                                    <div className="global-list-category" style="display: flex;">
-                                        <span></span>
-                                        <p>SPORT</p>
-                                    </div>
-                                    <section className="task " taskid="id1589711581078">
-                                        <div className="task-content categories-sport">
-                                            <div className="task-delete-button-wrapper">
-                                                <div className="task-delete-button">
-                                                    <span className="icon-trash"></span>
-                                                    <button className="select-for-deleting icon-close"
-                                                            taskid="id1589711581078" id="taskButtonDelete">
-                                                        <!--<span class=""></span>-->
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div className="task-term">
-                                                <span>05/27/2020 </span>
-                                            </div>
-                                            <div className="task-description priority-lowP">
-                                                <h2 className="task-title">dfdfdf</h2>
-                                                <p className="task-text">dfdfdfdf</p>
-                                            </div>
-                                            <div className="task-edit">
-                                                <button className="icon-arrows-up" taskid="id1589711581078"></button>
-                                                <button className="icon-edit" taskid="id1589711581078"
-                                                        title="Edit task"></button>
-                                            </div>
-                                            <div className="task-priority">
-                                                <span className="icon-tomato"></span>
-                                                <p>4</p>
-                                                <div className="task-start">
-                                                    <span className="icon-timer"></span>
-                                                    <a href="/timer" className="timer-link" id="linkToTimer"
-                                                       taskid="id1589711581078" title="Go to Timer"></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
-                                </section>
-                                <section className="global-list-others" id="global-list-others">
-                                    <div className="global-list-category">
-                                        <span></span>
-                                        <p>OTHER</p>
-                                    </div>
-                                </section>
-                            </section>*/}
+                                            <section className="global-list" id="global-list">
+                                                {this.state.globalListData[CATEGORIES.WORK].length ? (
+                                                    <section className="global-list-work" id="global-list-work">
+                                                        <div className="global-list-category">
+                                                            <span/>
+                                                            <p>WORK</p>
+                                                        </div>
+                                                        {this.state.globalListData[CATEGORIES.WORK].map(task => {
+                                                            return (<Task taskData={task}/>);
+                                                        })}
+                                                    </section>
+                                                ) : (<></>)}
+
+                                                {this.state.globalListData[CATEGORIES.STUDYING].length ? (
+                                                    <section className="global-list-education"
+                                                             id="global-list-education">
+                                                        <div className="global-list-category">
+                                                            <span/>
+                                                            <p>STUDYING</p>
+                                                        </div>
+                                                        {this.state.globalListData[CATEGORIES.STUDYING].map(task => {
+                                                            return (<Task taskData={task}/>);
+                                                        })}
+                                                    </section>
+                                                ) : (<></>)}
+
+                                                {this.state.globalListData[CATEGORIES.HOBBY].length ? (
+                                                    <section className="global-list-hobby" id="global-list-hobby">
+                                                        <div className="global-list-category">
+                                                            <span/>
+                                                            <p>HOBBY</p>
+                                                        </div>
+                                                        {this.state.globalListData[CATEGORIES.HOBBY].map(task => {
+                                                            return (<Task taskData={task}/>);
+                                                        })}
+                                                    </section>
+                                                ) : (<></>)}
+
+                                                {this.state.globalListData[CATEGORIES.SPORT].length ? (
+                                                    <section className="global-list-sport" id="global-list-sport">
+                                                        <div className="global-list-category">
+                                                            <span/>
+                                                            <p>SPORT</p>
+                                                        </div>
+                                                        {this.state.globalListData[CATEGORIES.SPORT].map(task => {
+                                                            return (<Task taskData={task}/>);
+                                                        })}
+                                                    </section>
+                                                ) : (<></>)}
+
+                                                {this.state.globalListData[CATEGORIES.OTHER].length ? (
+                                                    <section className="global-list-others" id="global-list-others">
+                                                        <div className="global-list-category">
+                                                            <span/>
+                                                            <p>OTHER</p>
+                                                        </div>
+                                                        {this.state.globalListData[CATEGORIES.OTHER].map(task => {
+                                                            return (<Task taskData={task}/>);
+                                                        })}
+                                                    </section>
+                                                ) : (<></>)}
+
+                                            </section>
                                         </section>
                                     </>
                                 )
 
-
                                 :
-
 
                                 (
                                     <>
+                                        {todoTaskList.map(task => {
+                                            return (<Task taskData={task}/>);
+                                        })}
                                     </>
                                 )
                         }

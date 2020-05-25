@@ -83,8 +83,9 @@
     margin-bottom: 18px;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
-    span {
+    & > span {
       width: 18px;
       height: 18px;
       margin: 0 10px 0 0;
@@ -112,8 +113,20 @@
       font-weight: bold;
     }
   }
+}
 
-  &-category {
-    display: none;
+.no-task-already {
+  text-align: center;
+
+  .page-indicate {
+    width: 160px;
+    height: 160px;
+    margin: 50px auto;
+    background: url("../../assets/images/svg-images/tomato-settings.svg") no-repeat;
+  }
+
+  p {
+    .message();
+    color: @nepal;
   }
 }

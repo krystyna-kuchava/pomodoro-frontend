@@ -14,6 +14,7 @@ import {LoginPageConnector} from './pages/login-page';
 import {SignUpPageConnector} from './pages/sign-up-page';
 import {TasksListPageConnector} from './pages/tasks-list-page';
 import {SettingsPageConnector} from './pages/settings-page';
+import {ReportsPageConnector} from './pages/reports-page';
 
 
 const App = () => (
@@ -52,7 +53,7 @@ const App = () => (
             <Route
                 path={routerPaths.REPORT}
                 exact
-                component={DefaultPage}
+                component={ReportsPageConnector}
             />
 
         </Router>

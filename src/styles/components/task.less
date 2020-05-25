@@ -199,7 +199,7 @@
     display: inline-block;
 
     .global-list-category {
-      span {
+      & > span {
         background-color: @color;
       }
     }
@@ -208,7 +208,7 @@
   .global-list-@{name}::before {
     content: "";
     width: 9px;
-    height: 100% - 14px;
+    height: ~"calc(100% - 40px)";
     position: absolute;
     top: 10px;
     left: 4px;
