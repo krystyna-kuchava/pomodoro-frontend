@@ -27,10 +27,15 @@
     "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
+    "crypto-js": "^4.0.0",
     "highcharts": "^8.1.0",
+    "hybrid-crypto-js": "^0.2.2",
     "react": "^16.11.0",
+    "react-countdown": "^2.2.1",
+    "react-countdown-circle-timer": "^2.1.2",
     "react-datepicker": "^2.16.0",
     "react-dom": "^16.11.0",
+    "react-encrypt": "^1.0.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-router-redux": "^4.0.8",

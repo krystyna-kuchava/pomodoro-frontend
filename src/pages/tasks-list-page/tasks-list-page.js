@@ -27,6 +27,8 @@ export class TasksListPage extends Component {
             isAddTaskModalWindow: false,
             isRemoveTaskModalWindow: false,
             isEditTaskModalWindow: false,
+
+            redirectToTimer: false
         };
 
         this.goToDoneList = this.goToDoneList.bind(this);
@@ -34,9 +36,41 @@ export class TasksListPage extends Component {
 
         this.onChangeFilter = this.onChangeFilter.bind(this);
 
+        this.moveTaskToTodoList = this.moveTaskToTodoList.bind(this);
+        this.startTask = this.startTask.bind(this);
 
         this.onAddTaskClick = this.onAddTaskClick.bind(this);
         this.closeAddTaskModal = this.closeAddTaskModal.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.getTodoTasksList(localStorage.getItem('token'));
+        this.props.getGlobalTasksList(localStorage.getItem('token'));
+        this.props.getDoneTasksList(localStorage.getItem('token'));
+        this.props.getSettings(localStorage.getItem('token'));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.globalTasksList !== this.state.globalTasksList) {
+            this.setState({globalTasksList: nextProps.globalTasksList});
+        }
+    }
+
+    moveTaskToTodoList(taskId) {
+        console.log(taskId);
+
+        this.props.moveTaskToTodoList(localStorage.getItem('token'), taskId, () => {
+            this.props.getTodoTasksList(localStorage.getItem('token'));
+            this.props.getGlobalTasksList(localStorage.getItem('token'));
+        });
+    }
+
+    startTask(taskData) {
+        console.log(taskData);
+
+        this.props.startTask(taskData, () => {
+            this.setState({redirectToTimer: true});
+        });
     }
 
     goToDoneList() {
@@ -109,17 +143,20 @@ export class TasksListPage extends Component {
 
     filterGlobalTasks(priority) {
         if (priority === 0) {
-            this.setState({globalListData: globalListData});
+            this.setState({globalTasksList: this.props.globalTasksList});
         } else {
+            console.log(priority);
+
             const filteredGlobalListData = {};
 
-            filteredGlobalListData[CATEGORIES.WORK] = globalListData[CATEGORIES.WORK].filter(task => task.priorityId === priority);
-            filteredGlobalListData[CATEGORIES.SPORT] = globalListData[CATEGORIES.SPORT].filter(task => task.priorityId === priority);
-            filteredGlobalListData[CATEGORIES.STUDYING] = globalListData[CATEGORIES.STUDYING].filter(task => task.priorityId === priority);
-            filteredGlobalListData[CATEGORIES.HOBBY] = globalListData[CATEGORIES.HOBBY].filter(task => task.priorityId === priority);
-            filteredGlobalListData[CATEGORIES.OTHER] = globalListData[CATEGORIES.OTHER].filter(task => task.priorityId === priority);
+            filteredGlobalListData[CATEGORIES.WORK] = this.props.globalTasksList[CATEGORIES.WORK].filter(task => task.priorityId === priority.toString());
+            filteredGlobalListData[CATEGORIES.SPORT] = this.props.globalTasksList[CATEGORIES.SPORT].filter(task => task.priorityId === priority.toString());
+            filteredGlobalListData[CATEGORIES.STUDYING] = this.props.globalTasksList[CATEGORIES.STUDYING].filter(task => task.priorityId === priority.toString());
+            filteredGlobalListData[CATEGORIES.HOBBY] = this.props.globalTasksList[CATEGORIES.HOBBY].filter(task => task.priorityId === priority.toString());
+            filteredGlobalListData[CATEGORIES.OTHER] = this.props.globalTasksList[CATEGORIES.OTHER].filter(task => task.priorityId === priority.toString());
 
-            this.setState({globalListData: filteredGlobalListData});
+            console.log(filteredGlobalListData);
+            this.setState({globalTasksList: filteredGlobalListData});
         }
     }
 
@@ -132,60 +169,10 @@ export class TasksListPage extends Component {
     }
 
     render() {
-        const todoTaskList = [{
-            title: 'Task 110',
-            description: 'Task 110',
-            categoryId: '1',
-            priorityId: '1',
-            estimation: '2',
-            deadlineDate: '19-05-2020',
-            status: 'DONE_LIST',
-            taskId: 233
-        },
-            {
-                title: 'Task 110',
-                description: 'Task 110',
-                categoryId: '2',
-                priorityId: '4',
-                estimation: '3',
-                deadlineDate: '19-05-2020',
-                status: 'TODO_LIST',
-                taskId: 236
-            },
-            {
-                title: 'Task 110',
-                description: 'Task 110',
-                categoryId: '3',
-                priorityId: '2',
-                estimation: '5',
-                deadlineDate: '19-05-2020',
-                status: 'TODO_LIST',
-                taskId: 23366
-            },
-            {
-                title: 'Task 110',
-                description: 'Task 110',
-                categoryId: '3',
-                priorityId: '3',
-                estimation: '4',
-                deadlineDate: '19-05-2020',
-                status: 'GLOBAL_LIST',
-                taskId: 23323
-            },
-            {
-                title: 'Task 110',
-                description: 'Task 110',
-                categoryId: '3',
-                priorityId: '4',
-                estimation: '2',
-                deadlineDate: '19-05-2020',
-                status: 'GLOBAL_LIST',
-                taskId: 3323
-            }];
 
         return (
             <>
-                <Header/>
+                <Header redirectToTimer={this.state.redirectToTimer}/>
                 {this.state.isAddTaskModalWindow ? (
                     <div className="modal-window-wrapper">
                         <AddTaskModalConnector closeAddTaskModal={this.closeAddTaskModal}/>
@@ -194,19 +181,19 @@ export class TasksListPage extends Component {
                 <div className="page-wrapper">
                     <main className="main" id="main">
                         <div className="page-heading">
-                            <h1>Daily Tasks List</h1>
+                            <h1>Tasks List</h1>
                             <a className="button-add-task icon-add" onClick={this.onAddTaskClick}/>
                         </div>
                         <div id="tasksNavigation" className="nav-task-type-wrapper">
                             <nav className="nav-tasks-type-wrapper">
                                 <ul className="nav-section-types" id="navigation">
-                                    <li className="navigation-item">
+                                    <li className="navigation-item" key={'isToDoList'}>
                                         <a className={this.state.isToDoList ? 'selected-item' : ''}
                                            onClick={this.goToToDoList}>
                                             To do
                                         </a>
                                     </li>
-                                    <li className="navigation-item">
+                                    <li className="navigation-item" key={'isDoneList'}>
                                         <a className={this.state.isDoneList ? 'selected-item' : ''}
                                            onClick={this.goToDoneList}>
                                             Done
@@ -221,18 +208,17 @@ export class TasksListPage extends Component {
                                     <>
                                         <section className="task-list-wrapper">
                                             <div className="task-list" id="taskListContainer">
-                                                {todoTaskList.length === 0 ? (
-                                                    <section className="no-task-already">
-                                                        <div className="page-indicate"/>
-                                                        <p>You don`t have any tasks left for today.</p>
-                                                        <p>Add new tasks to stay productivity.
-                                                        </p>
-                                                    </section>
-                                                ) : (<></>)}
-
-                                                {todoTaskList.map(task => {
-                                                    return (<Task taskData={task}/>);
-                                                })}
+                                                {this.props.todoTasksList ?
+                                                    this.props.todoTasksList.map(task => {
+                                                        return (<Task taskData={task} startTask={this.startTask}/>);
+                                                    })
+                                                    : (
+                                                        <section className="no-task-already">
+                                                            <div className="page-indicate"/>
+                                                            <p>You don`t have any tasks left for today.</p>
+                                                            <p>Add or move new tasks to stay productivity.</p>
+                                                        </section>
+                                                    )}
                                             </div>
                                         </section>
                                         <section className="global-list-wrapper" id="global-list-wrapper">
@@ -267,63 +253,63 @@ export class TasksListPage extends Component {
                                                 </ul>
                                             </div>
                                             <section className="global-list" id="global-list">
-                                                {this.state.globalListData[CATEGORIES.WORK].length ? (
+                                                {this.state.globalTasksList && this.state.globalTasksList[CATEGORIES.WORK].length ? (
                                                     <section className="global-list-work" id="global-list-work">
                                                         <div className="global-list-category">
                                                             <span/>
                                                             <p>WORK</p>
                                                         </div>
-                                                        {this.state.globalListData[CATEGORIES.WORK].map(task => {
-                                                            return (<Task taskData={task}/>);
+                                                        {this.state.globalTasksList[CATEGORIES.WORK].map(task => {
+                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList}/>);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
 
-                                                {this.state.globalListData[CATEGORIES.STUDYING].length ? (
+                                                {this.state.globalTasksList && this.state.globalTasksList[CATEGORIES.STUDYING].length ? (
                                                     <section className="global-list-education"
                                                              id="global-list-education">
                                                         <div className="global-list-category">
                                                             <span/>
                                                             <p>STUDYING</p>
                                                         </div>
-                                                        {this.state.globalListData[CATEGORIES.STUDYING].map(task => {
-                                                            return (<Task taskData={task}/>);
+                                                        {this.state.globalTasksList[CATEGORIES.STUDYING].map(task => {
+                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList}/>);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
 
-                                                {this.state.globalListData[CATEGORIES.HOBBY].length ? (
+                                                {this.state.globalTasksList && this.state.globalTasksList[CATEGORIES.HOBBY].length ? (
                                                     <section className="global-list-hobby" id="global-list-hobby">
                                                         <div className="global-list-category">
                                                             <span/>
                                                             <p>HOBBY</p>
                                                         </div>
-                                                        {this.state.globalListData[CATEGORIES.HOBBY].map(task => {
-                                                            return (<Task taskData={task}/>);
+                                                        {this.state.globalTasksList[CATEGORIES.HOBBY].map(task => {
+                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList}/>);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
 
-                                                {this.state.globalListData[CATEGORIES.SPORT].length ? (
+                                                {this.state.globalTasksList && this.state.globalTasksList[CATEGORIES.SPORT].length ? (
                                                     <section className="global-list-sport" id="global-list-sport">
                                                         <div className="global-list-category">
                                                             <span/>
                                                             <p>SPORT</p>
                                                         </div>
-                                                        {this.state.globalListData[CATEGORIES.SPORT].map(task => {
-                                                            return (<Task taskData={task}/>);
+                                                        {this.state.globalTasksList[CATEGORIES.SPORT].map(task => {
+                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList}/>);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
 
-                                                {this.state.globalListData[CATEGORIES.OTHER].length ? (
+                                                {this.state.globalTasksList && this.state.globalTasksList[CATEGORIES.OTHER].length ? (
                                                     <section className="global-list-others" id="global-list-others">
                                                         <div className="global-list-category">
                                                             <span/>
                                                             <p>OTHER</p>
                                                         </div>
-                                                        {this.state.globalListData[CATEGORIES.OTHER].map(task => {
-                                                            return (<Task taskData={task}/>);
+                                                        {this.state.globalTasksList[CATEGORIES.OTHER].map(task => {
+                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList}/>);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
@@ -337,9 +323,13 @@ export class TasksListPage extends Component {
 
                                 (
                                     <>
-                                        {todoTaskList.map(task => {
-                                            return (<Task taskData={task}/>);
-                                        })}
+                                        {this.props.doneTasksList ?
+                                            this.props.doneTasksList.map(task => {
+                                                return (<Task taskData={task}/>);
+                                            })
+                                            : (
+                                                <> </>
+                                            )}
                                     </>
                                 )
                         }

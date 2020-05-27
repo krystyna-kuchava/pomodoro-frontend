@@ -15,6 +15,7 @@ import {SignUpPageConnector} from './pages/sign-up-page';
 import {TasksListPageConnector} from './pages/tasks-list-page';
 import {SettingsPageConnector} from './pages/settings-page';
 import {ReportsPageConnector} from './pages/reports-page';
+import {TimerPageConnector} from './pages/timer-page';
 
 
 const App = () => (
@@ -56,49 +57,13 @@ const App = () => (
                 component={ReportsPageConnector}
             />
 
-        </Router>
+            <Route
+                path={routerPaths.TIMER}
+                exact
+                component={TimerPageConnector}
+            />
 
-        {/*<LoginConnector />*/}
-        {/*<BrowserRouter>
-            <div className="App">
-                <Switch>
-                    <Route
-                        path={routerPaths.DEFAULT}
-                        exact
-                        //component={TASKS_LIST}
-                    />
-                    <Route
-                        path={routerPaths.LOGIN}
-                        exact
-                        //component={EditPromotionDetails}
-                    />
-                    <Route
-                        path={routerPaths.SIGN_UP}
-                        exact
-                        //component={OrderList}
-                    />
-                    <Route
-                        path={routerPaths.TASKS_LIST}
-                        //component={CreationPromotion}
-                    />
-                    <Route
-                        path={routerPaths.SETTINGS}
-                        exact
-                        //component={PromotionDetails}
-                    />
-                    <Route
-                        path={routerPaths.REPORT}
-                        exact
-                        //component={OrderSettings}
-                    />
-                    <Route
-                        path={routerPaths.TIMER}
-                        exact
-                        //component={OrderSettings}
-                    />
-                </Switch>
-            </div>
-        </BrowserRouter>*/}
+        </Router>
     </Provider>
 );
 

@@ -9,11 +9,16 @@ export class Header extends Component {
         this.state = {
             redirectToTasksList: false,
             redirectToSettings: false,
-            redirectToReports: false,
-
+            redirectToReports: false
         };
 
         this.onNavigationClick = this.onNavigationClick.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.redirectToTimer !== this.state.redirectToTimer) {
+            this.setState({redirectToTimer: nextProps.redirectToTimer});
+        }
     }
 
     onNavigationClick(e) {
@@ -42,6 +47,11 @@ export class Header extends Component {
     }
 
     render() {
+        const currentHref = window.location.pathname;
+
+        if (this.state.redirectToTimer) {
+            return <Redirect push to={routerPaths.TIMER} />;
+        }
 
         if (this.state.redirectToTasksList) {
             return <Redirect push to={routerPaths.TASKS_LIST} />;
@@ -63,13 +73,13 @@ export class Header extends Component {
                 <nav className="main-nav-wrapper">
                     <ul className="main-nav">
                         <li>
-                            <a className="icon-list" id="tasksList" title="Go to Tasks list" onClick={this.onNavigationClick}/>
+                            <a className={currentHref.includes(routerPaths.TASKS_LIST) ? 'icon-list selected-item' : 'icon-list'} id="tasksList" title="Go to Tasks list" onClick={this.onNavigationClick}/>
                         </li>
                         <li>
-                            <a className="icon-statistics" id="reports" title="Go to Reports" onClick={this.onNavigationClick}/>
+                            <a className={currentHref.includes(routerPaths.REPORT) ? 'icon-statistics selected-item' : 'icon-statistics'} id="reports" title="Go to Reports" onClick={this.onNavigationClick}/>
                         </li>
                         <li>
-                            <a className="icon-settings" id="settings" title="Go to Settings" onClick={this.onNavigationClick}/>
+                            <a className={currentHref.includes(routerPaths.SETTINGS) ? 'icon-settings selected-item' : 'icon-settings'} id="settings" title="Go to Settings" onClick={this.onNavigationClick}/>
                         </li>
                     </ul>
                 </nav>

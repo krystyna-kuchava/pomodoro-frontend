@@ -29,7 +29,7 @@ export function createChartOfDay(data) {
     },
     tooltip: {
       formatter: function () {
-        const categories = ['Urgent', 'High', 'Normal', 'Low', 'Failed'];
+        const categories = ['Failed', 'Urgent', 'High', 'Normal', 'Low'];
         return categories[this.x] + ': ' + this.y;
       }
     },

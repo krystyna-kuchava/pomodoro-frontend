@@ -1,7 +1,4 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router';
-import routerPaths from "../../constants/router-paths";
-import {Header} from "../../components/header/header";
 
 export class Task extends Component {
     constructor() {
@@ -11,7 +8,16 @@ export class Task extends Component {
             redirectToTimer: false
         };
 
-        //this.onSignUpClick = this.onSignUpClick.bind(this);
+        this.onMoveTaskClick = this.onMoveTaskClick.bind(this);
+        this.onStartTaskClick = this.onStartTaskClick.bind(this);
+    }
+
+    onMoveTaskClick(taskId) {
+        this.props.onMoveTaskClick(taskId);
+    }
+
+    onStartTaskClick(taskData) {
+        this.props.startTask(taskData);
     }
 
     setCategoryClass(categoryId) {
@@ -50,7 +56,9 @@ export class Task extends Component {
 
 
         return (
-            <div className={taskData.status === 'DONE_LIST' ? 'task task-done' : 'task'} data-task-id={taskData.taskId}>
+            <div
+                className={(taskData.status === 'DONE_LIST' || taskData.status === 'FAILED') ? 'task task-done' : 'task'}
+                key={taskData.taskId}>
                 <div className={`task-content ${categoryClass}`}>
                     <div className="task-term">
                         <span>{taskData.completeDay ? taskData.completeDay : taskData.deadlineDate}</span>
@@ -62,28 +70,28 @@ export class Task extends Component {
                     <div className="task-edit">
                         {taskData.status === 'GLOBAL_LIST' ? (
                             <>
-                                <button className="icon-arrows-up" data-task-id={taskData.taskId}/>
+                                <button className="icon-arrows-up" data-task-id={taskData.taskId} onClick={this.onMoveTaskClick.bind(this, taskData.taskId)}/>
                                 <button className="icon-edit" data-task-id={taskData.taskId} title="Edit task"/>
                                 <button className="icon-trash" data-task-id={taskData.taskId}/>
                             </>
                         ) : (
                             taskData.status === 'TODO_LIST' ? (
                                 <>
-                                <button className="icon-edit" data-task-id={taskData.taskId} title="Edit task"/>
-                                < button className = "icon-trash" data-task-id={taskData.taskId}/>
+                                    <button className="icon-edit" data-task-id={taskData.taskId} title="Edit task"/>
+                                    <button className="icon-trash" data-task-id={taskData.taskId}/>
                                 </>
                             ) : (
-                            <button className="icon-trash" data-task-id={taskData.taskId}/>
+                                <button className="icon-trash" data-task-id={taskData.taskId}/>
                             )
-                            )}
+                        )}
                     </div>
                     <div className="task-priority">
                         <span className="icon-tomato"/>
                         <p>{taskData.estimation}</p>
                         <div className="task-start">
                             <span className="icon-timer"/>
-                            <a href="/timer" className="timer-link" id="linkToTimer" data-task-id={taskData.taskId}
-                               title="Go to Timer"/>
+                            <a className="timer-link" id="linkToTimer" data-task-id={taskData.taskId}
+                               title="Go to Timer" onClick={this.onStartTaskClick.bind(this, taskData)}/>
                         </div>
                     </div>
                 </div>

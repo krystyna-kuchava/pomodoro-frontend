@@ -1,0 +1,275 @@
+.arrow-left {
+  position: fixed;
+  top: 50%;
+  left: 37px;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+
+  a {
+    color: #8dA5B8;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.arrow-right {
+  position: fixed;
+  top: 50%;
+  right: 37px;
+  transform: translate(-50%, -50%);
+  font-size: 50px;
+
+  a {
+    color: #8dA5B8;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.timer-header {
+  .header-add-button,
+  .selected-list-item {
+    display: none;
+  }
+}
+
+.main-timer {
+  .page-heading {
+    display: block;
+    position: relative;
+  }
+}
+
+.timer-wrapper {
+  width: 264px;
+  height: 264px;
+  margin: 61px auto 0;
+}
+
+.timer {
+  width: 264px;
+  height: 264px;
+  position: relative;
+  border: 5px solid @high;
+  border-radius: 50%;
+  box-shadow: 0 0 25px 25px rgba(0, 0, 0, 0.1);
+
+  &-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+
+    p {
+      .caption();
+      font-size: 29px;
+      color: @white;
+    }
+  }
+}
+
+.start-iterations {
+  width: 123px;
+  margin: 69px auto 40px;
+
+  .button-save {
+    width: 100%;
+    height: 42px;
+  }
+}
+
+.container-timer-start {
+  margin: 35px auto 0;
+
+  .fail-finish-pomodora,
+  .start-finish-pomodora,
+  .add-pomodora {
+    display: none;
+  }
+
+}
+
+.timer-line {
+  .timer-line-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
+    height: 95%;
+  }
+
+  #halfclip {
+    width: 50%;
+    height: 100%;
+    right: 0;
+    position: absolute;
+    overflow: hidden;
+    transform-origin: left center;
+  }
+
+  .halfclip {
+    transform: rotate(180deg);
+  }
+
+  @keyframes cliprotate {
+    0% {transform: rotate(0deg);}
+    50% {transform: rotate(0deg);}
+    50.01% {transform: rotate(180deg);}
+    100% {transform: rotate(180deg);}
+  }
+
+  .halfcircle {
+    box-sizing: border-box;
+    height: 100%;
+    right: 0;
+    position: absolute;
+    border: solid 30px transparent;
+    border-top-color: @nepal;
+    border-left-color: @nepal;
+    border-radius: 50%;
+  }
+
+  .halfcircle-clipped {
+    width: 200%;
+    transform: rotate(135deg);
+  }
+
+  @keyframes rotate {
+    0% {transform: rotate(-45deg);}
+    100% {transform: rotate(135deg);}
+  }
+
+  .halfcircle-fixed {
+    width: 100%;
+    transform: rotate(135deg);
+    opacity: 1;
+  }
+
+  @keyframes showfixed {
+    0% {opacity: 0;}
+    49.99% {opacity: 0;}
+    50% {opacity: 1;}
+    100% {opacity: 1;}
+  }
+}
+
+.container-timer-pomodora {
+  margin: 35px auto 0;
+
+  .start-iterations,
+  .start-finish-pomodora {
+    display: none;
+  }
+}
+
+.break-over {
+  margin: 35px auto 0;
+
+  .start-iterations,
+  .fail-finish-pomodora,
+  .add-pomodora {
+    display: none;
+  }
+}
+
+.completed {
+  margin: 35px auto 0;
+
+  .add-pomodora {
+    display: none;
+  }
+
+  .start-iterations,
+  .fail-finish-pomodora,
+  .start-finish-pomodora,
+  .add-pomodora {
+    display: none;
+  }
+}
+
+.all-iteration-list-wrapper {
+  margin: 30px 0 0;
+  position: relative;
+  text-align: center;
+
+  .all-iteration-list {
+    display: inline-flex;
+    justify-content: center;
+
+    li {
+      margin: 0 5px;
+    }
+
+    .li-empty-tomato::before {
+      display: inline-block;
+      content: url("../../assets/images/svg-images/empty-tomato.svg");
+      width: 25px;
+      height: auto;
+    }
+
+    .li-fill-tomato::before {
+      display: inline-block;
+      content: url("../../assets/images/svg-images/fill-tomato.svg");
+      width: 25px;
+      height: auto;
+    }
+
+    .li-failed-tomato::before {
+      display: inline-block;
+      content: url("../../assets/images/svg-images/tomato-failed.svg");
+      width: 25px;
+      height: auto;
+    }
+  }
+}
+
+.add-pomodora {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  position: absolute;
+  top: 3px;
+  font-size: 16px;
+  color: #8DA5B8;
+  background-color: transparent;
+  border: none;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: @spray;
+  }
+}
+
+.full-timer-line {
+  width: 95%;
+  height: 95%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 25px solid @nepal;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.fail-finish-pomodora,
+.start-finish-pomodora {
+  width: 375px;
+  margin: 69px auto 40px;
+  display: flex;
+  justify-content: space-around;
+
+  .button-cancel,
+  .button-save,
+  .button-ok {
+    width: 168px;
+    height: 42px;
+  }
+}

@@ -41,13 +41,13 @@ export class ReportsPage extends Component {
     }
 
     componentDidMount() {
-        this.props.getDayReport((data) => {
+        this.props.getDayReport(localStorage.getItem('token'),(data) => {
             this.setState({todayReport: data});
 
             createChartOfDay(this.state.todayReport);
         });
 
-        this.props.getMonthReport((data) => {
+        this.props.getMonthReport(localStorage.getItem('token'), (data) => {
             this.setState({monthReport: data});
 
         });

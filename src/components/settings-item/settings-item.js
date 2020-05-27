@@ -37,13 +37,13 @@ export class SettingsItem extends Component {
 
         return (
             <div className={`pomodoro-criterion ${this.props.settingsItem.settingsType}`} id={this.props.settingsItem.settingsType}>
-                <label className="paragraph">{this.props.settingsItem.settingsTitle}</label>
+                <label className="caption">{this.props.settingsItem.settingsTitle}</label>
                 <div className="iteration-count">
                     <button className="iteration-decrease" onClick={this.onDecreaseValueClick}>-</button>
                     <input type="text" value={this.props.settingsItem.settingsValue} disabled/>
                     <button className="iteration-increase" onClick={this.onIncreaseValueClick}>+</button>
                 </div>
-                <p>Please select a value between {this.props.settingsItem.settingsRule}
+                <p>Please select a value in {this.props.settingsItem.settingsRule}
                     <span className="measure">{this.props.settingsItem.settingsMeasure}</span>
                 </p>
             </div>

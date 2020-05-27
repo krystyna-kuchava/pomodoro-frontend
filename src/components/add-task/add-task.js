@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import {convertToDate} from '../../constants/convertDate';
+import generateHint from '../../constants/hint-generator';
 
 export class AddTaskModal extends Component {
 
@@ -10,11 +11,37 @@ export class AddTaskModal extends Component {
         super();
 
         this.state = {
-            deadlineDate: '20-05-2020'
+            title: '',
+            description: '',
+            categoryId: '',
+            priorityId: '',
+            estimation: '',
+            deadlineDate: '20-05-2020',
+            shouldDisplayHint: false,
+            hint: ''
         };
 
         this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleSHowHint = this.handleSHowHint.bind(this);
         this.onCloseClick = this.onCloseClick.bind(this);
+    }
+
+    handleSHowHint(priorityId) {
+        generateHint(localStorage.getItem('token'), priorityId, (shouldDisplayHint) => {
+            if (shouldDisplayHint.shouldDisplayHint) {
+                this.setState({
+                    shouldDisplayHint: shouldDisplayHint.shouldDisplayHint,
+                    hint: `You have ${shouldDisplayHint.percentOfPriorityFailedTasks}% of failed tasks of this priority.
+                     And you have ${shouldDisplayHint.percentOfFailedTasks}% of failed tasks in total.
+                     Please choose higher estimation.`
+                });
+            } else {
+                this.setState({
+                    shouldDisplayHint: false,
+                    hint: ``
+                });
+            }
+        })
     }
 
     handleDateChange(date) {
@@ -107,26 +134,32 @@ export class AddTaskModal extends Component {
                         <li className="modal-add-item">
                             <p>Priority</p>
                             <form className="modal-add-type modal-add-priority" id="priority">
-                                <label className="priority-urgentP"><input type="radio" name="Priority"/>
+                                <label className="priority-urgentP">
+                                    <input type="radio" name="Priority"
+                                           onClick={this.handleSHowHint.bind(this, '1')}/>
                                     <span className="type-dot"/>
                                     <span>Urgent</span>
                                 </label>
                                 <label className="priority-highP">
-                                    <input type="radio" name="Priority"/>
+                                    <input type="radio" name="Priority"
+                                           onClick={this.handleSHowHint.bind(this, '2')}/>
                                     <span className="type-dot"/>
                                     <span>High</span>
                                 </label>
                                 <label className="priority-middleP">
-                                    <input type="radio" name="Priority"/>
+                                    <input type="radio" name="Priority"
+                                           onClick={this.handleSHowHint.bind(this, '3')}/>
                                     <span className="type-dot"/>
                                     <span>Middle</span>
                                 </label>
                                 <label className="priority-lowP">
-                                    <input type="radio" name="Priority"/>
+                                    <input type="radio" name="Priority"
+                                           onClick={this.handleSHowHint.bind(this, '4')}/>
                                     <span className="type-dot"/>
                                     <span>Low</span>
                                 </label>
                             </form>
+                            {this.state.shouldDisplayHint ? (<p className="modal-hint">{this.state.hint}</p>) : (<></>)}
                         </li>
                     </ul>
                 </div>

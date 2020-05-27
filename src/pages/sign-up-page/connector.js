@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
 import {SignUpPage} from './sign-up-page';
 
+import {token} from '../../constants/token';
 
 const mapStateToProps = state => {
     console.log(state);
@@ -30,6 +31,8 @@ const mapDispatchToProps = dispatch => {
                 .then(res => res.json())
                 .then((res) => {
                     console.log(res);
+                    localStorage.setItem('token', res.token);
+                    //token = res.token;
                     dispatch({type: 'AUTHORIZATION', payload: res});
                     callback();
                 })

@@ -12,6 +12,16 @@ export class SettingsPage extends Component {
         this.onUpdateSettingsClick = this.onUpdateSettingsClick.bind(this);
     }
 
+    componentDidMount() {
+        this.props.getSettings(localStorage.getItem('token'));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.settings !== this.state.settings) {
+            this.setState({settings: nextProps.settings});
+        }
+    }
+
     onUpdateSettingsClick(e) {
         e.preventDefault();
 
@@ -24,20 +34,17 @@ export class SettingsPage extends Component {
     };
 
     render() {
+
         const settings = [
             {
-                settingsType: 'shortBreak',
-                settingsTitle: 'Short break',
-                settingsValue: 5,
-                settingsMaxValue: 1,
-                settingsMinValue: 7,
+                settingsType: 'criterion-short-break',
+                settingsTitle: 'SHORT BREAK',
+                settingsValue: this.state.settings ? this.state.settings.shortBreak : '',
                 settingsMeasure: 'minutes',
             }, {
-                settingsType: 'workTime',
-                settingsTitle: 'Work time',
-                settingsValue: 20,
-                settingsMaxValue: 10,
-                settingsMinValue: 30,
+                settingsType: 'criterion-work-time',
+                settingsTitle: 'WORK TIME',
+                settingsValue: this.state.settings ? this.state.settings.workTime : '',
                 settingsMeasure: 'minutes',
             }
         ];
@@ -56,7 +63,7 @@ export class SettingsPage extends Component {
 
                             <div className="pomodoros-settings">
                                 {settings.map(settingsItem => {
-                                    return (<SettingsItem settingsItem={settingsItem} />)
+                                    return (<SettingsItem settingsItem={settingsItem}/>)
                                 })}
                             </div>
 
@@ -76,7 +83,8 @@ export class SettingsPage extends Component {
                                 <button class="button-ok" id="goToTaskList">Go to Task</button>
                                 <button class="button-save" id="saveSettings">Save</button>
                             </div>*/}
-                            <button className="paragraph settings-update" onClick={this.onUpdateSettingsClick}>Update</button>
+                            <button className="paragraph settings-update button-save" onClick={this.onUpdateSettingsClick}>Update
+                            </button>
                         </section>
                     </main>
                 </div>

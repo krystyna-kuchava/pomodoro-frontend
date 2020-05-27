@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router';
+import { Crypt, RSA } from 'hybrid-crypto-js';
+import CryptoJS from 'crypto-js';
 import routerPaths from "../../constants/router-paths";
+import {encryptKey} from "../../constants/encrypt-key";
 
 export class LoginPage extends Component {
 
@@ -20,7 +23,14 @@ export class LoginPage extends Component {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        this.props.login({email, password}, () => {
+        var encryptedPassword = CryptoJS.AES.encrypt(password, encryptKey).toString();
+
+        var bytes  = CryptoJS.AES.decrypt(encryptedPassword, encryptKey);
+        var originalText = bytes.toString(CryptoJS.enc.Utf8);
+
+        console.log(originalText);
+
+        this.props.login({email, encryptedPassword, encryptKey}, () => {
             this.setState({redirect: true});
         });
     };
