@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {AddTaskModal} from './add-task';
+import {RemoveTaskModal} from './delete-task';
 
 
 const mapStateToProps = state => {
@@ -12,16 +12,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        addTask: (token, taskData, callback) => {
-            fetch(`http://localhost:3030/task`, {
-                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        removeTask: (token, taskId, callback) => {
+            fetch(`http://localhost:3030/task/${taskId}`, {
+                method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                     // 'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify(taskData) // body data type must match "Content-Type" header
             })
                 .then(res => res.json())
                 .then((res) => {
@@ -37,5 +36,5 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export const AddTaskModalConnector = connect(mapStateToProps, mapDispatchToProps)(AddTaskModal);
+export const RemoveTaskModalConnector = connect(mapStateToProps, mapDispatchToProps)(RemoveTaskModal);
 

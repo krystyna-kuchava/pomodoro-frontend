@@ -9,8 +9,6 @@ function generateHint(token, priority, callback) {
     })
         .then(res => res.json())
         .then((res) => {
-            console.log(res);
-
             const shouldDisplayHintConfig = shouldDisplayHint(res);
             callback(shouldDisplayHintConfig);
         })

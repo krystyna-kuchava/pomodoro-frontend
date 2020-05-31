@@ -135,7 +135,7 @@ export class TimerPage extends Component {
                                     <CountdownCircleTimer
                                         isPlaying={this.state.isTimerProgress}
                                         size={264}
-                                        colors={[['#FFA841']]}
+                                        colors={[['#16A085']]}
                                         duration={this.props.settings.shortBreak * 60}
                                         initialRemainingTime={this.props.settings.shortBreak * 60}
                                     >

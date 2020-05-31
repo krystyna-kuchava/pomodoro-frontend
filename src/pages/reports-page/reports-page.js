@@ -1,15 +1,10 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router';
-import routerPaths from "../../constants/router-paths";
-import CATEGORIES from "../../constants/categories";
 import globalListData from "../../constants/globalList";
 import {Header} from "../../components/header/header";
 
 import {createChartOfDay} from './chartDay';
 import {creatChartForWeekOrMonth} from './chartWeekOrMonth';
 import {arrayOfDaysOfMonth} from './dates';
-import {Task} from "../../components/task/task";
-import {AddTaskModalConnector} from "../../components/add-task";
 
 export class ReportsPage extends Component {
     constructor() {

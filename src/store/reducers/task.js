@@ -7,13 +7,9 @@ import {
     START_TASKS
 } from '../actions/task';
 
-export function Task(state = { name: 'Kris' }, action) {
-
+export function Task(state = {  }, action) {
     switch (action.type) {
         case GET_TASK:
-            return state;
-
-        case UPDATE_TASK:
             return state;
 
         case GET_TODO_TASKS:

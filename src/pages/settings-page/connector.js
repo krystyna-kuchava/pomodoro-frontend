@@ -31,6 +31,26 @@ const mapDispatchToProps = dispatch => {
                     console.log(err);
                 });
 
+        },
+        updateSettings: (token, settings) => {
+            fetch(`http://localhost:3030/settings`, {
+                method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(settings)
+            })
+                .then(res => res.json())
+                .then((res) => {
+                    //console.log(res);
+                    //dispatch({type: 'GET_SETTINGS', payload: res});
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
         }
     }
 };

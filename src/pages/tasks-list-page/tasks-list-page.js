@@ -6,6 +6,7 @@ import globalListData from "../../constants/globalList";
 import {Header} from "../../components/header/header";
 import {Task} from "../../components/task/task";
 import {AddTaskModalConnector} from "../../components/add-task";
+import {RemoveTaskModalConnector} from "../../components/delete-task";
 
 export class TasksListPage extends Component {
     constructor() {
@@ -41,6 +42,10 @@ export class TasksListPage extends Component {
 
         this.onAddTaskClick = this.onAddTaskClick.bind(this);
         this.closeAddTaskModal = this.closeAddTaskModal.bind(this);
+
+        this.onRemoveTaskClick = this.onRemoveTaskClick.bind(this);
+        this.closeRemoveTaskModal = this.closeRemoveTaskModal.bind(this);
+        this.removeTaskCallback = this.removeTaskCallback.bind(this);
     }
 
     componentDidMount() {
@@ -145,18 +150,20 @@ export class TasksListPage extends Component {
         if (priority === 0) {
             this.setState({globalTasksList: this.props.globalTasksList});
         } else {
-            console.log(priority);
+            const filteredGlobalList = {};
 
-            const filteredGlobalListData = {};
+            filteredGlobalList[CATEGORIES.WORK] = this.props.globalTasksList[CATEGORIES.WORK]
+                .filter(task => task.priorityId === priority.toString());
+            filteredGlobalList[CATEGORIES.SPORT] = this.props.globalTasksList[CATEGORIES.SPORT]
+                .filter(task => task.priorityId === priority.toString());
+            filteredGlobalList[CATEGORIES.STUDYING] = this.props.globalTasksList[CATEGORIES.STUDYING]
+                .filter(task => task.priorityId === priority.toString());
+            filteredGlobalList[CATEGORIES.HOBBY] = this.props.globalTasksList[CATEGORIES.HOBBY]
+                .filter(task => task.priorityId === priority.toString());
+            filteredGlobalList[CATEGORIES.OTHER] = this.props.globalTasksList[CATEGORIES.OTHER]
+                .filter(task => task.priorityId === priority.toString());
 
-            filteredGlobalListData[CATEGORIES.WORK] = this.props.globalTasksList[CATEGORIES.WORK].filter(task => task.priorityId === priority.toString());
-            filteredGlobalListData[CATEGORIES.SPORT] = this.props.globalTasksList[CATEGORIES.SPORT].filter(task => task.priorityId === priority.toString());
-            filteredGlobalListData[CATEGORIES.STUDYING] = this.props.globalTasksList[CATEGORIES.STUDYING].filter(task => task.priorityId === priority.toString());
-            filteredGlobalListData[CATEGORIES.HOBBY] = this.props.globalTasksList[CATEGORIES.HOBBY].filter(task => task.priorityId === priority.toString());
-            filteredGlobalListData[CATEGORIES.OTHER] = this.props.globalTasksList[CATEGORIES.OTHER].filter(task => task.priorityId === priority.toString());
-
-            console.log(filteredGlobalListData);
-            this.setState({globalTasksList: filteredGlobalListData});
+            this.setState({globalTasksList: filteredGlobalList});
         }
     }
 
@@ -168,14 +175,37 @@ export class TasksListPage extends Component {
         this.setState({isAddTaskModalWindow: false});
     }
 
+    onRemoveTaskClick(taskId) {
+        this.setState({taskToRemove: taskId, isRemoveTaskModalWindow: true});
+    }
+
+    closeRemoveTaskModal() {
+        this.setState({isRemoveTaskModalWindow: false});
+    }
+
+    removeTaskCallback() {
+        this.props.getGlobalTasksList(localStorage.getItem('token'));
+        this.props.getTodoTasksList(localStorage.getItem('token'));
+    }
+
     render() {
 
         return (
             <>
                 <Header redirectToTimer={this.state.redirectToTimer}/>
+
                 {this.state.isAddTaskModalWindow ? (
                     <div className="modal-window-wrapper">
-                        <AddTaskModalConnector closeAddTaskModal={this.closeAddTaskModal}/>
+                        <AddTaskModalConnector closeAddTaskModal={this.closeAddTaskModal} addTaskCallback={this.props.getGlobalTasksList}/>
+                    </div>) : (<></>)}
+
+                {this.state.isRemoveTaskModalWindow ? (
+                    <div className="modal-window-wrapper">
+                        <RemoveTaskModalConnector
+                            closeRemoveTaskModal={this.closeRemoveTaskModal}
+                            removeTaskCallback={this.removeTaskCallback}
+                            taskId={this.state.taskToRemove}
+                        />
                     </div>) : (<></>)}
 
                 <div className="page-wrapper">
@@ -208,9 +238,9 @@ export class TasksListPage extends Component {
                                     <>
                                         <section className="task-list-wrapper">
                                             <div className="task-list" id="taskListContainer">
-                                                {this.props.todoTasksList ?
+                                                {this.props.todoTasksList && this.props.todoTasksList.length ?
                                                     this.props.todoTasksList.map(task => {
-                                                        return (<Task taskData={task} startTask={this.startTask}/>);
+                                                        return (<Task taskData={task} startTask={this.startTask} removeTask={this.onRemoveTaskClick}/>);
                                                     })
                                                     : (
                                                         <section className="no-task-already">
@@ -260,7 +290,7 @@ export class TasksListPage extends Component {
                                                             <p>WORK</p>
                                                         </div>
                                                         {this.state.globalTasksList[CATEGORIES.WORK].map(task => {
-                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList}/>);
+                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList} removeTask={this.onRemoveTaskClick}/>);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
@@ -273,7 +303,7 @@ export class TasksListPage extends Component {
                                                             <p>STUDYING</p>
                                                         </div>
                                                         {this.state.globalTasksList[CATEGORIES.STUDYING].map(task => {
-                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList}/>);
+                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList} removeTask={this.onRemoveTaskClick}/>);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
@@ -285,7 +315,7 @@ export class TasksListPage extends Component {
                                                             <p>HOBBY</p>
                                                         </div>
                                                         {this.state.globalTasksList[CATEGORIES.HOBBY].map(task => {
-                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList}/>);
+                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList} removeTask={this.onRemoveTaskClick}/>);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
@@ -297,7 +327,7 @@ export class TasksListPage extends Component {
                                                             <p>SPORT</p>
                                                         </div>
                                                         {this.state.globalTasksList[CATEGORIES.SPORT].map(task => {
-                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList}/>);
+                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList} removeTask={this.onRemoveTaskClick}/>);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
@@ -309,7 +339,7 @@ export class TasksListPage extends Component {
                                                             <p>OTHER</p>
                                                         </div>
                                                         {this.state.globalTasksList[CATEGORIES.OTHER].map(task => {
-                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList}/>);
+                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList} removeTask={this.onRemoveTaskClick}/>);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}

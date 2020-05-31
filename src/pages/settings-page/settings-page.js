@@ -25,12 +25,15 @@ export class SettingsPage extends Component {
     onUpdateSettingsClick(e) {
         e.preventDefault();
 
-        const shortBreak = document.getElementById('shortBreak').value;
-        const workTime = document.getElementById('workTime').value;
+        const shortBreak = document.getElementById('criterion-short-break').value;
+        const workTime = document.getElementById('criterion-work-time').value;
 
-        /*this.props.login({shortBreak, workTime}, () => {
-            this.setState({redirect: true});
-        });*/
+        this.props.updateSettings(localStorage.getItem('token'), {
+            shortBreak,
+            workTime,
+            longBreak: '',
+            workIterations: ''
+        });
     };
 
     render() {
@@ -63,7 +66,9 @@ export class SettingsPage extends Component {
 
                             <div className="pomodoros-settings">
                                 {settings.map(settingsItem => {
-                                    return (<SettingsItem settingsItem={settingsItem}/>)
+                                    return (<SettingsItem
+                                        settingsItem={settingsItem}
+                                    />)
                                 })}
                             </div>
 
@@ -83,7 +88,9 @@ export class SettingsPage extends Component {
                                 <button class="button-ok" id="goToTaskList">Go to Task</button>
                                 <button class="button-save" id="saveSettings">Save</button>
                             </div>*/}
-                            <button className="paragraph settings-update button-save" onClick={this.onUpdateSettingsClick}>Update
+                            <button className="paragraph settings-update button-save"
+                                    onClick={this.onUpdateSettingsClick}>
+                                Update
                             </button>
                         </section>
                     </main>
