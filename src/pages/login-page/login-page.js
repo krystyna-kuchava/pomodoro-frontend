@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router';
-import { Crypt, RSA } from 'hybrid-crypto-js';
 import CryptoJS from 'crypto-js';
 import routerPaths from "../../constants/router-paths";
 import {encryptKey} from "../../constants/encrypt-key";
@@ -32,8 +31,13 @@ export class LoginPage extends Component {
 
             var encryptedPassword = CryptoJS.AES.encrypt(password, encryptKey).toString();
 
-            this.props.login({email, encryptedPassword, encryptKey}, () => {
+            this.props.login({
+                email,
+                encryptedPassword,
+                encryptKey}, () => {
                 this.setState({redirect: true});
+            }, (errorMessage) => {
+                this.setState({errorMessage: errorMessage});
             });
         }
     };
@@ -67,11 +71,12 @@ export class LoginPage extends Component {
 
         return (
             <div className="login-content">
-
-
                 <h1>Login</h1>
 
                 <form className="login-form">
+                    {this.state.errorMessage ? (
+                        <p className="error-message form-error">{this.state.errorMessage}</p>
+                    ) : (<></>)}
                     <label className="paragraph login-form-item">
                         E-mail:
                         <input type="text"  id="email" onChange={this.validateEmail}/>

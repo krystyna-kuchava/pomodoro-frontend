@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Redirect } from 'react-router';
+import {Redirect} from 'react-router';
 import routerPaths from "../../constants/router-paths";
 
 export class Header extends Component {
@@ -25,24 +25,26 @@ export class Header extends Component {
         const targetId = e.target.id;
         const currentHref = window.location.pathname;
 
-        switch (targetId) {
-            case 'tasksList':
-                if (!currentHref.includes(routerPaths.TASKS_LIST)) {
-                    this.setState({redirectToTasksList: true});
-                }
-                break;
+        if (!this.props.isBlocked) {
+            switch (targetId) {
+                case 'tasksList':
+                    if (!currentHref.includes(routerPaths.TASKS_LIST)) {
+                        this.setState({redirectToTasksList: true});
+                    }
+                    break;
 
-            case 'reports':
-                if (!currentHref.includes(routerPaths.REPORT)) {
-                    this.setState({redirectToReports: true});
-                }
-                break;
+                case 'reports':
+                    if (!currentHref.includes(routerPaths.REPORT)) {
+                        this.setState({redirectToReports: true});
+                    }
+                    break;
 
-            case 'settings':
-                if (!currentHref.includes(routerPaths.SETTINGS)) {
-                    this.setState({redirectToSettings: true});
-                }
-                break;
+                case 'settings':
+                    if (!currentHref.includes(routerPaths.SETTINGS)) {
+                        this.setState({redirectToSettings: true});
+                    }
+                    break;
+            }
         }
     }
 
@@ -50,19 +52,19 @@ export class Header extends Component {
         const currentHref = window.location.pathname;
 
         if (this.state.redirectToTimer) {
-            return <Redirect push to={routerPaths.TIMER} />;
+            return <Redirect push to={routerPaths.TIMER}/>;
         }
 
         if (this.state.redirectToTasksList) {
-            return <Redirect push to={routerPaths.TASKS_LIST} />;
+            return <Redirect push to={routerPaths.TASKS_LIST}/>;
         }
 
         if (this.state.redirectToSettings) {
-            return <Redirect push to={routerPaths.SETTINGS} />;
+            return <Redirect push to={routerPaths.SETTINGS}/>;
         }
 
         if (this.state.redirectToReports) {
-            return <Redirect push to={routerPaths.REPORT} />;
+            return <Redirect push to={routerPaths.REPORT}/>;
         }
 
         return (
@@ -73,18 +75,21 @@ export class Header extends Component {
                 <nav className="main-nav-wrapper">
                     <ul className="main-nav">
                         <li>
-                            <a className={currentHref.includes(routerPaths.TASKS_LIST) ? 'icon-list selected-item' : 'icon-list'} id="tasksList" title="Go to Tasks list" onClick={this.onNavigationClick}/>
+                            <a className={currentHref.includes(routerPaths.TASKS_LIST) ? 'icon-list selected-item' : 'icon-list'}
+                               id="tasksList" title="Go to Tasks list" onClick={this.onNavigationClick}/>
                         </li>
                         <li>
-                            <a className={currentHref.includes(routerPaths.REPORT) ? 'icon-statistics selected-item' : 'icon-statistics'} id="reports" title="Go to Reports" onClick={this.onNavigationClick}/>
+                            <a className={currentHref.includes(routerPaths.REPORT) ? 'icon-statistics selected-item' : 'icon-statistics'}
+                               id="reports" title="Go to Reports" onClick={this.onNavigationClick}/>
                         </li>
                         <li>
-                            <a className={currentHref.includes(routerPaths.SETTINGS) ? 'icon-settings selected-item' : 'icon-settings'} id="settings" title="Go to Settings" onClick={this.onNavigationClick}/>
+                            <a className={currentHref.includes(routerPaths.SETTINGS) ? 'icon-settings selected-item' : 'icon-settings'}
+                               id="settings" title="Go to Settings" onClick={this.onNavigationClick}/>
                         </li>
                     </ul>
                 </nav>
             </header>
 
-        ) ;
+        );
     }
 }

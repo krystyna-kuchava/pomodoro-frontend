@@ -3,8 +3,6 @@ import {SettingsPage} from './settings-page';
 
 
 const mapStateToProps = state => {
-    console.log(state);
-
     return {
         settings: state.Settings.settings,
     };
@@ -23,16 +21,14 @@ const mapDispatchToProps = dispatch => {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log(res);
                     dispatch({type: 'GET_SETTINGS', payload: res});
-                    //callback();
                 })
                 .catch((err) => {
                     console.log(err);
                 });
 
         },
-        updateSettings: (token, settings) => {
+        updateSettings: (token, settings, callback) => {
             fetch(`http://localhost:3030/settings`, {
                 method: 'PUT', // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
@@ -44,8 +40,8 @@ const mapDispatchToProps = dispatch => {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    //console.log(res);
-                    //dispatch({type: 'GET_SETTINGS', payload: res});
+                    callback(res.successMessage);
+                    dispatch({type: 'GET_SETTINGS', payload: res.settings});
                 })
                 .catch((err) => {
                     console.log(err);

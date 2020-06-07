@@ -3,8 +3,6 @@ import {TasksListPage} from './tasks-list-page';
 
 
 const mapStateToProps = state => {
-    console.log(state);
-
     return {
         token: state.Authorization.token,
         todoTasksList: state.Task.todoTasksList,
@@ -26,7 +24,6 @@ const mapDispatchToProps = dispatch => {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log(res);
                     dispatch({type: 'GET_TODO_TASKS', payload: res});
                 })
                 .catch((err) => {
@@ -44,7 +41,6 @@ const mapDispatchToProps = dispatch => {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log(res);
                     dispatch({type: 'GET_DONE_TASKS', payload: res});
                 })
                 .catch((err) => {
@@ -62,7 +58,6 @@ const mapDispatchToProps = dispatch => {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log(res);
                     dispatch({type: 'GET_GLOBAL_TASKS', payload: res});
                 })
                 .catch((err) => {
@@ -80,9 +75,7 @@ const mapDispatchToProps = dispatch => {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log(res);
                     callback();
-                    //dispatch({type: 'GET_GLOBAL_TASKS', payload: res});
                 })
                 .catch((err) => {
                     console.log(err);
@@ -104,9 +97,7 @@ const mapDispatchToProps = dispatch => {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log(res);
                     dispatch({type: 'GET_SETTINGS', payload: res});
-                    //callback();
                 })
                 .catch((err) => {
                     console.log(err);

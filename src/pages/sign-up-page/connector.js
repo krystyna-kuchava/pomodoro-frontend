@@ -1,40 +1,32 @@
 import {connect} from 'react-redux';
 import {SignUpPage} from './sign-up-page';
 
-import {token} from '../../constants/token';
-
 const mapStateToProps = state => {
-    console.log(state);
-
     return {
-        //name: state.SignUp.name
+
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        signUp: (signUpData, callback) => {
+        signUp: (signUpData, successCallback, errorCallback) => {
             fetch(`http://localhost:3030/sign-up`, {
                 method: 'POST', // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
-                //cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                //credentials: 'same-origin', // include, *same-origin, omit
                 headers: {
                     'Content-Type': 'application/json',
-                    //'Authorization': ''
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                //redirect: 'follow', // manual, *follow, error
-                //referrerPolicy: 'no-referrer', // no-referrer, *client
-                body: JSON.stringify(signUpData) // body data type must match "Content-Type" header
+                body: JSON.stringify(signUpData)
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log(res);
-                    localStorage.setItem('token', res.token);
-                    //token = res.token;
-                    dispatch({type: 'AUTHORIZATION', payload: res});
-                    callback();
+                    if (res.token) {
+                        localStorage.setItem('token', res.token);
+                        dispatch({type: 'AUTHORIZATION', payload: res});
+                        successCallback();
+                    } else {
+                        errorCallback(res.errorMessage);
+                    }
                 })
                 .catch((err) => {
                     console.log(err);

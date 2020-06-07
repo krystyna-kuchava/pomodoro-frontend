@@ -33,6 +33,8 @@ export class SettingsPage extends Component {
             workTime,
             longBreak: '',
             workIterations: ''
+        }, (successMessage) => {
+            this.setState({successMessage: successMessage});
         });
     };
 
@@ -63,7 +65,9 @@ export class SettingsPage extends Component {
                         </div>
 
                         <section className="section-pomodoros">
-
+                            {this.state.successMessage ? (
+                                <p className="success-message form-success">{this.state.successMessage}</p>
+                            ) : (<></>)}
                             <div className="pomodoros-settings">
                                 {settings.map(settingsItem => {
                                     return (<SettingsItem
@@ -92,6 +96,17 @@ export class SettingsPage extends Component {
                                     onClick={this.onUpdateSettingsClick}>
                                 Update
                             </button>
+                        </section>
+
+                        <section className="section-name section-categories">
+                            <p className="heading-categories">Categories list overview</p>
+                            <ul className="list-categories">
+                                <li className="categories-work">Work</li>
+                                <li className="categories-education">Education</li>
+                                <li className="categories-hobby">Hobby</li>
+                                <li className="categories-sport">Sport</li>
+                                <li className="categories-others">Other</li>
+                            </ul>
                         </section>
                     </main>
                 </div>

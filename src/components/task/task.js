@@ -11,6 +11,7 @@ export class Task extends Component {
         this.onMoveTaskClick = this.onMoveTaskClick.bind(this);
         this.onStartTaskClick = this.onStartTaskClick.bind(this);
         this.onRemoveTaskClick = this.onRemoveTaskClick.bind(this);
+        this.onEditTaskClick = this.onEditTaskClick.bind(this);
     }
 
     onMoveTaskClick(taskId) {
@@ -23,6 +24,10 @@ export class Task extends Component {
 
     onRemoveTaskClick(taskId) {
         this.props.removeTask(taskId);
+    }
+
+    onEditTaskClick(taskData) {
+        this.props.editTask(taskData);
     }
 
     setCategoryClass(categoryId) {
@@ -76,13 +81,13 @@ export class Task extends Component {
                         {taskData.status === 'GLOBAL_LIST' ? (
                             <>
                                 <button className="icon-arrows-up" data-task-id={taskData.taskId} onClick={this.onMoveTaskClick.bind(this, taskData.taskId)}/>
-                                <button className="icon-edit" data-task-id={taskData.taskId} title="Edit task"/>
+                                <button className="icon-edit" data-task-id={taskData.taskId} title="Edit task" onClick={this.onEditTaskClick.bind(this, taskData)}/>
                                 <button className="icon-trash" data-task-id={taskData.taskId} onClick={this.onRemoveTaskClick.bind(this, taskData.taskId)}/>
                             </>
                         ) : (
                             taskData.status === 'TODO_LIST' ? (
                                 <>
-                                    <button className="icon-edit" data-task-id={taskData.taskId} title="Edit task"/>
+                                    <button className="icon-edit" data-task-id={taskData.taskId} title="Edit task" onClick={this.onEditTaskClick.bind(this, taskData)}/>
                                     <button className="icon-trash" data-task-id={taskData.taskId} onClick={this.onRemoveTaskClick.bind(this, taskData.taskId)}/>
                                 </>
                             ) : (

@@ -6,6 +6,7 @@ import globalListData from "../../constants/globalList";
 import {Header} from "../../components/header/header";
 import {Task} from "../../components/task/task";
 import {AddTaskModalConnector} from "../../components/add-task";
+import {EditTaskModalConnector} from "../../components/edit-task";
 import {RemoveTaskModalConnector} from "../../components/delete-task";
 
 export class TasksListPage extends Component {
@@ -46,6 +47,10 @@ export class TasksListPage extends Component {
         this.onRemoveTaskClick = this.onRemoveTaskClick.bind(this);
         this.closeRemoveTaskModal = this.closeRemoveTaskModal.bind(this);
         this.removeTaskCallback = this.removeTaskCallback.bind(this);
+
+        this.onEditTaskClick = this.onEditTaskClick.bind(this);
+        this.closeEditTaskModal = this.closeEditTaskModal.bind(this);
+        this.editTaskCallback = this.editTaskCallback.bind(this);
     }
 
     componentDidMount() {
@@ -62,8 +67,6 @@ export class TasksListPage extends Component {
     }
 
     moveTaskToTodoList(taskId) {
-        console.log(taskId);
-
         this.props.moveTaskToTodoList(localStorage.getItem('token'), taskId, () => {
             this.props.getTodoTasksList(localStorage.getItem('token'));
             this.props.getGlobalTasksList(localStorage.getItem('token'));
@@ -71,8 +74,6 @@ export class TasksListPage extends Component {
     }
 
     startTask(taskData) {
-        console.log(taskData);
-
         this.props.startTask(taskData, () => {
             this.setState({redirectToTimer: true});
         });
@@ -188,6 +189,19 @@ export class TasksListPage extends Component {
         this.props.getTodoTasksList(localStorage.getItem('token'));
     }
 
+    onEditTaskClick(taskData) {
+        this.setState({taskToEdit: taskData, isEditTaskModalWindow: true});
+    }
+
+    closeEditTaskModal() {
+        this.setState({isEditTaskModalWindow: false});
+    }
+
+    editTaskCallback() {
+        this.props.getGlobalTasksList(localStorage.getItem('token'));
+        this.props.getTodoTasksList(localStorage.getItem('token'));
+    }
+
     render() {
 
         return (
@@ -205,6 +219,15 @@ export class TasksListPage extends Component {
                             closeRemoveTaskModal={this.closeRemoveTaskModal}
                             removeTaskCallback={this.removeTaskCallback}
                             taskId={this.state.taskToRemove}
+                        />
+                    </div>) : (<></>)}
+
+                {this.state.isEditTaskModalWindow ? (
+                    <div className="modal-window-wrapper">
+                        <EditTaskModalConnector
+                            closeEditTaskModal={this.closeEditTaskModal}
+                            editTaskCallback={this.editTaskCallback}
+                            taskData={this.state.taskToEdit}
                         />
                     </div>) : (<></>)}
 
@@ -240,7 +263,11 @@ export class TasksListPage extends Component {
                                             <div className="task-list" id="taskListContainer">
                                                 {this.props.todoTasksList && this.props.todoTasksList.length ?
                                                     this.props.todoTasksList.map(task => {
-                                                        return (<Task taskData={task} startTask={this.startTask} removeTask={this.onRemoveTaskClick}/>);
+                                                        return (<Task taskData={task}
+                                                                      startTask={this.startTask}
+                                                                      removeTask={this.onRemoveTaskClick}
+                                                                      editTask={this.onEditTaskClick}
+                                                        />);
                                                     })
                                                     : (
                                                         <section className="no-task-already">
@@ -290,7 +317,11 @@ export class TasksListPage extends Component {
                                                             <p>WORK</p>
                                                         </div>
                                                         {this.state.globalTasksList[CATEGORIES.WORK].map(task => {
-                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList} removeTask={this.onRemoveTaskClick}/>);
+                                                            return (<Task taskData={task}
+                                                                          onMoveTaskClick={this.moveTaskToTodoList}
+                                                                          removeTask={this.onRemoveTaskClick}
+                                                                          editTask={this.onEditTaskClick}
+                                                            />);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
@@ -303,7 +334,11 @@ export class TasksListPage extends Component {
                                                             <p>STUDYING</p>
                                                         </div>
                                                         {this.state.globalTasksList[CATEGORIES.STUDYING].map(task => {
-                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList} removeTask={this.onRemoveTaskClick}/>);
+                                                            return (<Task taskData={task}
+                                                                          onMoveTaskClick={this.moveTaskToTodoList}
+                                                                          removeTask={this.onRemoveTaskClick}
+                                                                          editTask={this.onEditTaskClick}
+                                                            />);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
@@ -315,7 +350,11 @@ export class TasksListPage extends Component {
                                                             <p>HOBBY</p>
                                                         </div>
                                                         {this.state.globalTasksList[CATEGORIES.HOBBY].map(task => {
-                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList} removeTask={this.onRemoveTaskClick}/>);
+                                                            return (<Task taskData={task}
+                                                                          onMoveTaskClick={this.moveTaskToTodoList}
+                                                                          removeTask={this.onRemoveTaskClick}
+                                                                          editTask={this.onEditTaskClick}
+                                                            />);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
@@ -327,7 +366,11 @@ export class TasksListPage extends Component {
                                                             <p>SPORT</p>
                                                         </div>
                                                         {this.state.globalTasksList[CATEGORIES.SPORT].map(task => {
-                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList} removeTask={this.onRemoveTaskClick}/>);
+                                                            return (<Task taskData={task}
+                                                                          onMoveTaskClick={this.moveTaskToTodoList}
+                                                                          removeTask={this.onRemoveTaskClick}
+                                                                          editTask={this.onEditTaskClick}
+                                                            />);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}
@@ -339,7 +382,11 @@ export class TasksListPage extends Component {
                                                             <p>OTHER</p>
                                                         </div>
                                                         {this.state.globalTasksList[CATEGORIES.OTHER].map(task => {
-                                                            return (<Task taskData={task} onMoveTaskClick={this.moveTaskToTodoList} removeTask={this.onRemoveTaskClick}/>);
+                                                            return (<Task taskData={task}
+                                                                          onMoveTaskClick={this.moveTaskToTodoList}
+                                                                          removeTask={this.onRemoveTaskClick}
+                                                                          editTask={this.onEditTaskClick}
+                                                            />);
                                                         })}
                                                     </section>
                                                 ) : (<></>)}

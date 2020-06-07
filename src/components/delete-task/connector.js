@@ -3,10 +3,8 @@ import {RemoveTaskModal} from './delete-task';
 
 
 const mapStateToProps = state => {
-    console.log(state);
-
     return {
-        //name: state.SignUp.name
+
     };
 };
 
@@ -24,7 +22,6 @@ const mapDispatchToProps = dispatch => {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log(res);
                     dispatch({type: 'AUTHORIZATION', payload: res});
                     callback();
                 })

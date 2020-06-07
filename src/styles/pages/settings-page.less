@@ -1,6 +1,13 @@
 .pomodoros-settings {
   display: flex;
   justify-content: space-around;
+  max-width: 790px;
+  margin: 0 auto;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .section-name {
@@ -278,6 +285,54 @@
     }
   }
 }
+
+.section-categories {
+  margin-top: 55px;
+  text-align: left;
+
+  .heading-categories {
+    text-align: center;
+  }
+}
+
+.list-categories {
+  width: 190px;
+  margin: 30px auto 100px;
+  .caption();
+  color: @nepal;
+
+  li {
+    display: flex;
+    align-items: center;
+    padding: 25px 0 10px;
+    margin-left: 27px;
+    position: relative;
+    border-bottom: 1px solid @nepal;
+
+    &::before {
+      content: "";
+      width: 17px;
+      height: 17px;
+      position: absolute;
+      left: -40px;
+      bottom: 15px;
+      display: inline-block;
+      border-radius: 50%;
+    }
+  }
+}
+
+.categories-finishing {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+
+  .button-ok {
+    width: 145px;
+    height: 42px;
+  }
+}
+
 
 @colors-iteration: @work, @others, @malibu, @hobby;
 @names-iteration: work-time, work-iteration, short-break, long-break;

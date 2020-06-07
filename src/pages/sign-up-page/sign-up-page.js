@@ -28,22 +28,23 @@ export class SignUpPage extends Component {
     onSignUpClick(e) {
         e.preventDefault();
 
-        if (!this.state.isEmailError && !this.state.isPasswordError) {
+        if (!this.state.isEmailError && !this.state.isPasswordError && !this.state.isNameError) {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
+            const encryptedPassword = CryptoJS.AES.encrypt(password, encryptKey).toString();
+
+            this.props.signUp({
+                name,
+                email,
+                encryptedPassword
+            }, () => {
+                this.setState({redirect: true});
+            }, (errorMessage) => {
+                this.setState({errorMessage: errorMessage});
+            });
         }
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        const encryptedPassword = CryptoJS.AES.encrypt(password, encryptKey).toString();
-
-        this.props.signUp({
-            name,
-            email,
-            encryptedPassword
-        }, () => {
-            this.setState({redirect: true});
-        });
     };
 
     validateEmail() {
@@ -88,6 +89,9 @@ export class SignUpPage extends Component {
                 <h1>Sign up</h1>
 
                 <form className="sign-up-form">
+                    {this.state.errorMessage ? (
+                        <p className="error-message form-error">{this.state.errorMessage}</p>
+                    ) : (<></>)}
                     <label className="paragraph sign-up-form-item">
                         Name:
                         <input type="text" id="name" onChange={this.validateName}/>

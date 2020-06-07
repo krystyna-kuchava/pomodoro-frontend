@@ -1,18 +1,18 @@
 import {connect} from 'react-redux';
-import {AddTaskModal} from './add-task';
+import {EditTaskModal} from './edit-task';
 
 
 const mapStateToProps = state => {
     return {
-
+        taskToEdit: state.Task.taskToEdit,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        addTask: (token, taskData, callback) => {
-            fetch(`http://localhost:3030/task`, {
-                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        editTask: (token, taskData, callback) => {
+            fetch(`http://localhost:3030/task/${taskData.taskId}`, {
+                method: 'PUT', // *GET, POST, PUT, DELETE, etc.
                 mode: 'cors', // no-cors, *cors, same-origin
                 headers: {
                     'Content-Type': 'application/json',
@@ -34,5 +34,5 @@ const mapDispatchToProps = dispatch => {
     }
 };
 
-export const AddTaskModalConnector = connect(mapStateToProps, mapDispatchToProps)(AddTaskModal);
+export const EditTaskModalConnector = connect(mapStateToProps, mapDispatchToProps)(EditTaskModal);
 

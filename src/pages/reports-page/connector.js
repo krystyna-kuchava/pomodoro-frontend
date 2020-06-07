@@ -41,8 +41,6 @@ const mapDispatchToProps = dispatch => {
             })
                 .then(res => res.json())
                 .then((res) => {
-                    console.log(res);
-                    //dispatch({type: 'AUTHORIZATION', payload: res});
                     callback(res);
                 })
                 .catch((err) => {
